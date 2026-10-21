@@ -4,6 +4,12 @@
 #
 # Recommended: add any editor/OS/tool-specific ignore rules from the Global/ templates as needed.
 # See: https://github.com/github/gitignore/tree/main/Global
+
+# Operating-system and test-run artifacts.
+.DS_Store
+Thumbs.db
+Desktop.ini
+/TestResults/
 #
 .utmp/
 /[Ll]ibrary/
