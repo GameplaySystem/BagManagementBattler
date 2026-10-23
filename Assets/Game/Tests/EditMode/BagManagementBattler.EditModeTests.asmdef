@@ -1,0 +1,13 @@
+{
+  "name": "BagManagementBattler.EditModeTests",
+  "rootNamespace": "BagManagementBattler.Tests",
+  "references": [
+    "BagManagementBattler.Runtime"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
+}
