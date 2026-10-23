@@ -1,0 +1,696 @@
+fileFormatVersion: 2
+guid: f9410564c377b664b9a73fe705f54ca3
+TextureImporter:
+  internalIDToNameTable:
+  - first:
+      213: -6321939147899075484
+    second: Cartoon Weapon Sprite Sheet_0
+  - first:
+      213: -8891356048150610438
+    second: Cartoon Weapon Sprite Sheet_1
+  - first:
+      213: -6210779866356851980
+    second: Cartoon Weapon Sprite Sheet_2
+  - first:
+      213: 1893022618939310316
+    second: Cartoon Weapon Sprite Sheet_3
+  - first:
+      213: 554881081920658627
+    second: Cartoon Weapon Sprite Sheet_4
+  - first:
+      213: -3167192566193774619
+    second: Cartoon Weapon Sprite Sheet_5
+  - first:
+      213: 2974644454154074762
+    second: Cartoon Weapon Sprite Sheet_6
+  - first:
+      213: 803001768005808233
+    second: Cartoon Weapon Sprite Sheet_7
+  - first:
+      213: -7808050801515088815
+    second: Cartoon Weapon Sprite Sheet_8
+  - first:
+      213: 7204071445206342152
+    second: Cartoon Weapon Sprite Sheet_9
+  - first:
+      213: 5105214746594443341
+    second: Cartoon Weapon Sprite Sheet_10
+  - first:
+      213: 9150454052939042591
+    second: Cartoon Weapon Sprite Sheet_11
+  - first:
+      213: 3462587844304836759
+    second: Cartoon Weapon Sprite Sheet_12
+  - first:
+      213: 5115616344257330307
+    second: Cartoon Weapon Sprite Sheet_13
+  - first:
+      213: 1830161703986129890
+    second: Cartoon Weapon Sprite Sheet_14
+  - first:
+      213: -317019116311700891
+    second: Cartoon Weapon Sprite Sheet_15
+  - first:
+      213: 1532389318751470699
+    second: Cartoon Weapon Sprite Sheet_16
+  - first:
+      213: -7096787555170712955
+    second: Cartoon Weapon Sprite Sheet_17
+  - first:
+      213: -3452663551940969309
+    second: Cartoon Weapon Sprite Sheet_18
+  - first:
+      213: -7040501696579996426
+    second: Cartoon Weapon Sprite Sheet_19
+  - first:
+      213: 3598506423123023073
+    second: Cartoon Weapon Sprite Sheet_20
+  - first:
+      213: -4806203967750823487
+    second: Cartoon Weapon Sprite Sheet_21
+  - first:
+      213: 8687374560230723890
+    second: Cartoon Weapon Sprite Sheet_22
+  - first:
+      213: -8042897417394427327
+    second: Cartoon Weapon Sprite Sheet_23
+  - first:
+      213: 2787822714985592903
+    second: Cartoon Weapon Sprite Sheet_24
+  - first:
+      213: -3259029391718858087
+    second: Cartoon Weapon Sprite Sheet_25
+  externalObjects: {}
+  serializedVersion: 13
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 0
+    sRGBTexture: 1
+    linearTexture: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapsPreserveCoverage: 0
+    alphaTestReferenceValue: 0.5
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: 0.25
+    normalMapFilter: 0
+    flipGreenChannel: 0
+  isReadable: 0
+  streamingMipmaps: 0
+  streamingMipmapsPriority: 0
+  vTOnly: 0
+  ignoreMipmapLimit: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 6
+  cubemapConvolution: 0
+  seamlessCubemap: 0
+  textureFormat: 1
+  maxTextureSize: 2048
+  textureSettings:
+    serializedVersion: 2
+    filterMode: 1
+    aniso: 1
+    mipBias: 0
+    wrapU: 1
+    wrapV: 1
+    wrapW: 1
+  nPOTScale: 0
+  lightmap: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: 0.5, y: 0.5}
+  spritePixelsToUnits: 100
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spriteGenerateFallbackPhysicsShape: 1
+  alphaUsage: 1
+  alphaIsTransparency: 1
+  spriteTessellationDetail: -1
+  textureType: 8
+  textureShape: 1
+  singleChannelComponent: 0
+  flipbookRows: 1
+  flipbookColumns: 1
+  maxTextureSizeSet: 0
+  compressionQualitySet: 0
+  textureFormatSet: 0
+  ignorePngGamma: 0
+  applyGammaDecoding: 0
+  swizzle: 50462976
+  cookieLightType: 0
+  platformSettings:
+  - serializedVersion: 4
+    buildTarget: DefaultTexturePlatform
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Android
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  spriteSheet:
+    serializedVersion: 2
+    sprites:
+    - serializedVersion: 2
+      name: Crowbar_1
+      rect:
+        serializedVersion: 2
+        x: 241
+        y: 519
+        width: 185
+        height: 122
+      alignment: 9
+      pivot: {x: 0.25530428, y: 0.27662835}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 46407dd07d5f348a0800000000000000
+      internalID: -6321939147899075484
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SMG_1
+      rect:
+        serializedVersion: 2
+        x: 644
+        y: 515
+        width: 191
+        height: 119
+      alignment: 9
+      pivot: {x: 0.2963212, y: 0.5408648}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: afd367a58ce8b9480800000000000000
+      internalID: -8891356048150610438
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Rifle_1
+      rect:
+        serializedVersion: 2
+        x: 849
+        y: 521
+        width: 224
+        height: 114
+      alignment: 9
+      pivot: {x: 0.3161967, y: 0.4857815}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 4fad6af1e90eec9a0800000000000000
+      internalID: -6210779866356851980
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sniper_1
+      rect:
+        serializedVersion: 2
+        x: 1358
+        y: 532
+        width: 290
+        height: 109
+      alignment: 9
+      pivot: {x: 0.27530348, y: 0.3423669}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 5ef13cc342fdb04d0800000000000000
+      internalID: -3167192566193774619
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Knife_0
+      rect:
+        serializedVersion: 2
+        x: 57
+        y: 517
+        width: 168
+        height: 113
+      alignment: 9
+      pivot: {x: 0.20212886, y: 0.2689463}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: a8a70f6ee5f084920800000000000000
+      internalID: 2974644454154074762
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Pistol_1
+      rect:
+        serializedVersion: 2
+        x: 477
+        y: 529
+        width: 132
+        height: 101
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 9603fff7ad5d42b00800000000000000
+      internalID: 803001768005808233
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shotgun_1
+      rect:
+        serializedVersion: 2
+        x: 1093
+        y: 533
+        width: 247
+        height: 101
+      alignment: 9
+      pivot: {x: 0.34249964, y: 0.5000006}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1543d733a2b34a390800000000000000
+      internalID: -7808050801515088815
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Knife_2
+      rect:
+        serializedVersion: 2
+        x: 52
+        y: 358
+        width: 174
+        height: 119
+      alignment: 9
+      pivot: {x: 0.22490464, y: 0.285167}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: d4009d073cd59d640800000000000000
+      internalID: 5105214746594443341
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cartoon Weapon Sprite Sheet_11
+      rect:
+        serializedVersion: 2
+        x: 245
+        y: 354
+        width: 194
+        height: 142
+      alignment: 9
+      pivot: {x: 0.21789755, y: 0.31760526}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: f1f07feda71fcfe70800000000000000
+      internalID: 9150454052939042591
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Pistol_2
+      rect:
+        serializedVersion: 2
+        x: 470
+        y: 370
+        width: 146
+        height: 116
+      alignment: 9
+      pivot: {x: 0.2890834, y: 0.49527714}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 798106f7c459d0030800000000000000
+      internalID: 3462587844304836759
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cartoon Weapon Sprite Sheet_13
+      rect:
+        serializedVersion: 2
+        x: 54
+        y: 203
+        width: 171
+        height: 118
+      alignment: 9
+      pivot: {x: 0.21371666, y: 0.28334627}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 38cf3ae16f15ef640800000000000000
+      internalID: 5115616344257330307
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Cartoon Weapon Sprite Sheet_14
+      rect:
+        serializedVersion: 2
+        x: 229
+        y: 196
+        width: 204
+        height: 136
+      alignment: 9
+      pivot: {x: 0.23172611, y: 0.29299825}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 2ebed978f5a066910800000000000000
+      internalID: 1830161703986129890
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Pistol_3
+      rect:
+        serializedVersion: 2
+        x: 455
+        y: 198
+        width: 166
+        height: 134
+      alignment: 9
+      pivot: {x: 0.25783473, y: 0.45403302}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 56a9b391bc8b99bf0800000000000000
+      internalID: -317019116311700891
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SMG_3
+      rect:
+        serializedVersion: 2
+        x: 639
+        y: 181
+        width: 205
+        height: 151
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b64c8c967f3244510800000000000000
+      internalID: 1532389318751470699
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SMG_2
+      rect:
+        serializedVersion: 2
+        x: 640
+        y: 353
+        width: 205
+        height: 146
+      alignment: 9
+      pivot: {x: 0.30864942, y: 0.44226784}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 58203a7a155238d90800000000000000
+      internalID: -7096787555170712955
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Rifle_3
+      rect:
+        serializedVersion: 2
+        x: 851
+        y: 185
+        width: 242
+        height: 152
+      alignment: 9
+      pivot: {x: 0.32317007, y: 0.40828845}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3acbe91eacca510d0800000000000000
+      internalID: -3452663551940969309
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Rifle_2
+      rect:
+        serializedVersion: 2
+        x: 856
+        y: 357
+        width: 228
+        height: 141
+      alignment: 9
+      pivot: {x: 0.30804604, y: 0.4080317}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 6f470d6520d1b4e90800000000000000
+      internalID: -7040501696579996426
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shotgun_3
+      rect:
+        serializedVersion: 2
+        x: 1101
+        y: 196
+        width: 244
+        height: 133
+      alignment: 9
+      pivot: {x: 0.3312628, y: 0.37568676}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1c1a328a4feec4db0800000000000000
+      internalID: -4806203967750823487
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Shotgun_2
+      rect:
+        serializedVersion: 2
+        x: 1095
+        y: 367
+        width: 244
+        height: 111
+      alignment: 9
+      pivot: {x: 0.36049265, y: 0.4386671}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 23151558221cf8870800000000000000
+      internalID: 8687374560230723890
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sniper_3
+      rect:
+        serializedVersion: 2
+        x: 1354
+        y: 209
+        width: 297
+        height: 119
+      alignment: 9
+      pivot: {x: 0.30461353, y: 0.3283703}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 14a6c477963e16090800000000000000
+      internalID: -8042897417394427327
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: Sniper_2
+      rect:
+        serializedVersion: 2
+        x: 1353
+        y: 376
+        width: 302
+        height: 119
+      alignment: 9
+      pivot: {x: 0.2777912, y: 0.34744033}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 7483b7f1df550b620800000000000000
+      internalID: 2787822714985592903
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    outline: []
+    customData: 
+    physicsShape: []
+    bones: []
+    spriteID: 80e29572cfb9cd1418cd5c0f11de6994
+    internalID: 0
+    vertices: []
+    indices: 
+    edges: []
+    weights: []
+    secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
+    nameFileIdTable:
+      Cartoon Weapon Sprite Sheet_11: 9150454052939042591
+      Cartoon Weapon Sprite Sheet_13: 5115616344257330307
+      Cartoon Weapon Sprite Sheet_14: 1830161703986129890
+      Cartoon Weapon Sprite Sheet_20: 3598506423123023073
+      Cartoon Weapon Sprite Sheet_25: -3259029391718858087
+      Cartoon Weapon Sprite Sheet_3: 1893022618939310316
+      Cartoon Weapon Sprite Sheet_4: 554881081920658627
+      Cartoon Weapon Sprite Sheet_9: 7204071445206342152
+      Crowbar_1: -6321939147899075484
+      Knife_0: 2974644454154074762
+      Knife_2: 5105214746594443341
+      Pistol_1: 803001768005808233
+      Pistol_2: 3462587844304836759
+      Pistol_3: -317019116311700891
+      Rifle_1: -6210779866356851980
+      Rifle_2: -7040501696579996426
+      Rifle_3: -3452663551940969309
+      SMG_1: -8891356048150610438
+      SMG_2: -7096787555170712955
+      SMG_3: 1532389318751470699
+      Shotgun_1: -7808050801515088815
+      Shotgun_2: 8687374560230723890
+      Shotgun_3: -4806203967750823487
+      Sniper_1: -3167192566193774619
+      Sniper_2: 2787822714985592903
+      Sniper_3: -8042897417394427327
+  mipmapLimitGroupName: 
+  pSDRemoveMatte: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -1,0 +1,107 @@
+{
+  "cell_size": 512,
+  "atlas_size": [
+    2048,
+    1024
+  ],
+  "sprites": [
+    {
+      "name": "body_blue",
+      "file": "PNG/body_blue.png",
+      "rect_unity_bottom_left": {
+        "x": 0,
+        "y": 512,
+        "width": 512,
+        "height": 512
+      },
+      "pivot_normalized": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "name": "body_red",
+      "file": "PNG/body_red.png",
+      "rect_unity_bottom_left": {
+        "x": 512,
+        "y": 512,
+        "width": 512,
+        "height": 512
+      },
+      "pivot_normalized": {
+        "x": 0.5,
+        "y": 0.5
+      }
+    },
+    {
+      "name": "head_plain",
+      "file": "PNG/head_plain.png",
+      "rect_unity_bottom_left": {
+        "x": 1024,
+        "y": 512,
+        "width": 512,
+        "height": 512
+      },
+      "pivot_normalized": {
+        "x": 0.5,
+        "y": 0.25
+      }
+    },
+    {
+      "name": "head_cap_blue",
+      "file": "PNG/head_cap_blue.png",
+      "rect_unity_bottom_left": {
+        "x": 0,
+        "y": 0,
+        "width": 512,
+        "height": 512
+      },
+      "pivot_normalized": {
+        "x": 0.5,
+        "y": 0.25
+      }
+    },
+    {
+      "name": "head_cap_red",
+      "file": "PNG/head_cap_red.png",
+      "rect_unity_bottom_left": {
+        "x": 512,
+        "y": 0,
+        "width": 512,
+        "height": 512
+      },
+      "pivot_normalized": {
+        "x": 0.5,
+        "y": 0.25
+      }
+    },
+    {
+      "name": "head_bandana_blue",
+      "file": "PNG/head_bandana_blue.png",
+      "rect_unity_bottom_left": {
+        "x": 1024,
+        "y": 0,
+        "width": 512,
+        "height": 512
+      },
+      "pivot_normalized": {
+        "x": 0.5,
+        "y": 0.25
+      }
+    },
+    {
+      "name": "head_bandana_red",
+      "file": "PNG/head_bandana_red.png",
+      "rect_unity_bottom_left": {
+        "x": 1536,
+        "y": 0,
+        "width": 512,
+        "height": 512
+      },
+      "pivot_normalized": {
+        "x": 0.5,
+        "y": 0.25
+      }
+    }
+  ]
+}
