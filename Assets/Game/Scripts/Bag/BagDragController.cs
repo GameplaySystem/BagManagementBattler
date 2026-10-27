@@ -77,11 +77,15 @@ namespace BagManagementBattler.Bag
             Vector2 screenPosition = pointerPosition.ReadValue<Vector2>();
             bool validDestination = false;
 
-            if (bagView.TryGetCell(screenPosition, worldCamera, out Vector2Int cell))
+            if (bagView.TryGetPlacementOrigin(
+                    screenPosition,
+                    worldCamera,
+                    manager.DraggedItem,
+                    out Vector2Int origin))
             {
-                PlacementFailureReason failure = manager.ValidateDropToBag(cell);
+                PlacementFailureReason failure = manager.ValidateDropToBag(origin);
                 validDestination = failure == PlacementFailureReason.None;
-                bagView.ShowPlacementPreview(manager.DraggedItem, cell, failure);
+                bagView.ShowPlacementPreview(manager.DraggedItem, origin, failure);
             }
             else
             {
@@ -139,9 +143,13 @@ namespace BagManagementBattler.Bag
             {
                 manager.DropToContainer();
             }
-            else if (bagView.TryGetCell(screenPosition, worldCamera, out Vector2Int cell))
+            else if (bagView.TryGetPlacementOrigin(
+                         screenPosition,
+                         worldCamera,
+                         manager.DraggedItem,
+                         out Vector2Int origin))
             {
-                manager.TryDropToBag(cell, out _);
+                manager.TryDropToBag(origin, out _);
             }
             else
             {

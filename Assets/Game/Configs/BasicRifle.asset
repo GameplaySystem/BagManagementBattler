@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: BasicRifle
   m_EditorClassIdentifier: BagManagementBattler.Runtime::BagManagementBattler.Bag.BagItemDefinition
   itemTypeId: weapon.rifle.basic
+  level: 1
+  nextLevelDefinition: {fileID: 0}
   footprint:
   - {x: 0, y: 0}
   - {x: 1, y: 0}

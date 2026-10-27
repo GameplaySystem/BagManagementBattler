@@ -68,13 +68,35 @@ namespace BagManagementBattler.Bag
 
         public bool TryGetCell(Vector2 screenPosition, Camera camera, out Vector2Int cell)
         {
-            Vector3 world = camera.ScreenToWorldPoint(
-                new Vector3(screenPosition.x, screenPosition.y, -camera.transform.position.z));
-            Vector2 relative = (Vector2)world - worldOrigin;
+            Vector2 relative = ScreenToBoardPosition(screenPosition, camera);
             cell = new Vector2Int(
                 Mathf.FloorToInt(relative.x / cellSize),
                 Mathf.FloorToInt(relative.y / cellSize));
             return manager.Grid.IsInBounds(cell);
+        }
+
+        public bool TryGetPlacementOrigin(
+            Vector2 screenPosition,
+            Camera camera,
+            BagItemInstance item,
+            out Vector2Int origin)
+        {
+            if (item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
+            bool pointerIsOverGrid = TryGetCell(screenPosition, camera, out _);
+            Vector2 relativeInCells = ScreenToBoardPosition(screenPosition, camera) / cellSize;
+            GetFootprintBounds(item.Definition.Footprint, out Vector2Int min, out Vector2Int max);
+            Vector2 footprintCenterFromOrigin = new Vector2(
+                (min.x + max.x + 1) * 0.5f,
+                (min.y + max.y + 1) * 0.5f);
+            Vector2 floatingOrigin = relativeInCells - footprintCenterFromOrigin;
+            origin = new Vector2Int(
+                Mathf.FloorToInt(floatingOrigin.x + 0.5f),
+                Mathf.FloorToInt(floatingOrigin.y + 0.5f));
+            return pointerIsOverGrid;
         }
 
         public BagItemInstance GetItemAt(Vector2Int cell)
@@ -140,6 +162,13 @@ namespace BagManagementBattler.Bag
                 worldOrigin.x + (cell.x + 0.5f) * cellSize,
                 worldOrigin.y + (cell.y + 0.5f) * cellSize,
                 0f);
+        }
+
+        private Vector2 ScreenToBoardPosition(Vector2 screenPosition, Camera camera)
+        {
+            Vector3 world = camera.ScreenToWorldPoint(
+                new Vector3(screenPosition.x, screenPosition.y, -camera.transform.position.z));
+            return (Vector2)world - worldOrigin;
         }
 
         private void CreateItemVisual(BagItemInstance item)

@@ -5,25 +5,19 @@ namespace BagManagementBattler.Bag
 {
     public sealed class BagItemInstance
     {
-        public BagItemInstance(BagItemDefinition definition, int level = 1)
+        public BagItemInstance(BagItemDefinition definition)
         {
             Definition = definition != null
                 ? definition
                 : throw new ArgumentNullException(nameof(definition));
             Definition.Validate();
 
-            if (level < 1)
-            {
-                throw new ArgumentOutOfRangeException(nameof(level), "Item level must be at least one.");
-            }
-
             InstanceId = Guid.NewGuid();
-            Level = level;
         }
 
         public Guid InstanceId { get; }
-        public BagItemDefinition Definition { get; }
-        public int Level { get; }
+        public BagItemDefinition Definition { get; private set; }
+        public int Level => Definition.Level;
         public Vector2Int? Placement { get; private set; }
         public bool IsPlaced => Placement.HasValue;
 
@@ -35,6 +29,16 @@ namespace BagManagementBattler.Bag
         internal void ClearPlacement()
         {
             Placement = null;
+        }
+
+        internal void AdvanceTo(BagItemDefinition nextLevelDefinition)
+        {
+            if (nextLevelDefinition == null)
+            {
+                throw new ArgumentNullException(nameof(nextLevelDefinition));
+            }
+
+            Definition = nextLevelDefinition;
         }
     }
 }

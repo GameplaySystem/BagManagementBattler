@@ -36,6 +36,12 @@ namespace BagManagementBattler.Bag
                 throw new UnityException($"Could not place the initial soldier: {failure}.");
             }
 
+            BagItemInstance crowbarInstance = new BagItemInstance(crowbar);
+            if (!grid.TryPlace(crowbarInstance, Vector2Int.zero, out failure))
+            {
+                throw new UnityException($"Could not place the initial crowbar: {failure}.");
+            }
+
             container.AddBottom(new BagItemInstance(rifle));
             container.AddBottom(new BagItemInstance(crowbar));
 

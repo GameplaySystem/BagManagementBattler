@@ -20,12 +20,16 @@ namespace BagManagementBattler.Bag
     public sealed class BagItemDefinition : ScriptableObject
     {
         [SerializeField] private string itemTypeId = "item";
+        [SerializeField] private int level = 1;
+        [SerializeField] private BagItemDefinition nextLevelDefinition;
         [SerializeField] private List<Vector2Int> footprint = new List<Vector2Int> { Vector2Int.zero };
         [SerializeField] private Sprite iconSprite;
         [SerializeField] private Color itemColor = Color.white;
         [SerializeField] private List<BagItemVisualPart> visualParts = new List<BagItemVisualPart>();
 
         public string ItemTypeId => itemTypeId;
+        public int Level => level;
+        public BagItemDefinition NextLevelDefinition => nextLevelDefinition;
         public IReadOnlyList<Vector2Int> Footprint => footprint;
         public Sprite IconSprite => iconSprite;
         public Color ItemColor => itemColor;
@@ -36,6 +40,11 @@ namespace BagManagementBattler.Bag
             if (string.IsNullOrWhiteSpace(itemTypeId))
             {
                 throw new InvalidOperationException("An item type identifier is required.");
+            }
+
+            if (level < 1)
+            {
+                throw new InvalidOperationException("An item definition level must be at least one.");
             }
 
             if (footprint == null || footprint.Count == 0)
@@ -57,6 +66,15 @@ namespace BagManagementBattler.Bag
             string itemTypeId,
             IEnumerable<Vector2Int> footprint)
         {
+            return CreateTransient(itemTypeId, 1, footprint, null);
+        }
+
+        public static BagItemDefinition CreateTransient(
+            string itemTypeId,
+            int level,
+            IEnumerable<Vector2Int> footprint,
+            BagItemDefinition nextLevelDefinition = null)
+        {
             if (footprint == null)
             {
                 throw new ArgumentNullException(nameof(footprint));
@@ -64,11 +82,15 @@ namespace BagManagementBattler.Bag
 
             BagItemDefinition definition = CreateInstance<BagItemDefinition>();
             definition.hideFlags = HideFlags.HideAndDontSave;
-            definition.Configure(itemTypeId, footprint);
+            definition.Configure(itemTypeId, level, footprint, nextLevelDefinition);
             return definition;
         }
 
-        private void Configure(string configuredItemTypeId, IEnumerable<Vector2Int> configuredFootprint)
+        private void Configure(
+            string configuredItemTypeId,
+            int configuredLevel,
+            IEnumerable<Vector2Int> configuredFootprint,
+            BagItemDefinition configuredNextLevelDefinition)
         {
             if (string.IsNullOrWhiteSpace(configuredItemTypeId))
             {
@@ -76,6 +98,8 @@ namespace BagManagementBattler.Bag
             }
 
             itemTypeId = configuredItemTypeId;
+            level = configuredLevel;
+            nextLevelDefinition = configuredNextLevelDefinition;
             footprint = new List<Vector2Int>();
 
             HashSet<Vector2Int> uniqueCells = new HashSet<Vector2Int>();

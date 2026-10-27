@@ -73,17 +73,113 @@ namespace BagManagementBattler.Tests
         }
 
         [Test]
-        public void TryDropToBag_OccupiedDestination_RestoresContainerIndex()
+        public void TryDropToBag_MatchingItems_MergesIntoDestinationInstance()
+        {
+            BagManager manager = CreateManager();
+            BagItemDefinition levelTwo = CreateDefinition("crowbar", 2, null, Vector2Int.zero);
+            BagItemDefinition levelOne = CreateDefinition("crowbar", 1, levelTwo, Vector2Int.zero);
+            BagItemInstance destination = new BagItemInstance(levelOne);
+            BagItemInstance dragged = new BagItemInstance(levelOne);
+            Assert.That(manager.Grid.TryPlace(destination, Vector2Int.zero, out _), Is.True);
+            manager.Container.AddBottom(dragged);
+            Assert.That(manager.BeginDrag(dragged), Is.True);
+            Assert.That(manager.ValidateDropToBag(Vector2Int.zero), Is.EqualTo(PlacementFailureReason.None));
+
+            bool dropped = manager.TryDropToBag(Vector2Int.zero, out PlacementFailureReason failure);
+
+            Assert.That(dropped, Is.True);
+            Assert.That(failure, Is.EqualTo(PlacementFailureReason.None));
+            Assert.That(manager.IsDragging, Is.False);
+            Assert.That(destination.Definition, Is.SameAs(levelTwo));
+            Assert.That(destination.Level, Is.EqualTo(2));
+            Assert.That(manager.Grid.GetOccupant(Vector2Int.zero), Is.SameAs(destination));
+            Assert.That(manager.Container.Count, Is.Zero);
+            Assert.That(dragged.IsPlaced, Is.False);
+        }
+
+        [Test]
+        public void TryDropToBag_IncompatibleSingleBlocker_ReplacesAndAppendsBlocker()
+        {
+            BagManager manager = CreateManager();
+            BagItemInstance existing = CreateItem("existing", Vector2Int.zero);
+            BagItemInstance dragged = CreateItem("rifle", Vector2Int.zero, Vector2Int.right);
+            BagItemInstance retained = CreateItem("retained", Vector2Int.zero);
+            Vector2Int destination = new Vector2Int(1, 1);
+            Assert.That(manager.Grid.TryPlace(existing, destination, out _), Is.True);
+            manager.Container.AddBottom(dragged);
+            manager.Container.AddBottom(retained);
+            Assert.That(manager.BeginDrag(dragged), Is.True);
+            Assert.That(manager.ValidateDropToBag(destination), Is.EqualTo(PlacementFailureReason.None));
+
+            bool dropped = manager.TryDropToBag(destination, out PlacementFailureReason failure);
+
+            Assert.That(dropped, Is.True);
+            Assert.That(failure, Is.EqualTo(PlacementFailureReason.None));
+            Assert.That(manager.Grid.GetOccupant(destination), Is.SameAs(dragged));
+            Assert.That(manager.Grid.GetOccupant(destination + Vector2Int.right), Is.SameAs(dragged));
+            Assert.That(manager.Container.Count, Is.EqualTo(2));
+            Assert.That(manager.Container.Items[0], Is.SameAs(retained));
+            Assert.That(manager.Container.Items[1], Is.SameAs(existing));
+        }
+
+        [Test]
+        public void TryDropToBag_MaxLevelMatch_UsesReplacement()
+        {
+            BagManager manager = CreateManager();
+            BagItemDefinition maximumLevel = CreateDefinition("crowbar", 2, null, Vector2Int.zero);
+            BagItemInstance existing = new BagItemInstance(maximumLevel);
+            BagItemInstance dragged = new BagItemInstance(maximumLevel);
+            Assert.That(manager.Grid.TryPlace(existing, Vector2Int.zero, out _), Is.True);
+            manager.Container.AddBottom(dragged);
+            Assert.That(manager.BeginDrag(dragged), Is.True);
+
+            bool dropped = manager.TryDropToBag(Vector2Int.zero, out PlacementFailureReason failure);
+
+            Assert.That(dropped, Is.True);
+            Assert.That(failure, Is.EqualTo(PlacementFailureReason.None));
+            Assert.That(manager.Grid.GetOccupant(Vector2Int.zero), Is.SameAs(dragged));
+            Assert.That(manager.Container.Count, Is.EqualTo(1));
+            Assert.That(manager.Container.Items[0], Is.SameAs(existing));
+            Assert.That(existing.Level, Is.EqualTo(2));
+            Assert.That(dragged.Level, Is.EqualTo(2));
+        }
+
+        [Test]
+        public void TryDropToBag_DifferentLevelsOfSameFamily_UsesReplacement()
+        {
+            BagManager manager = CreateManager();
+            BagItemDefinition levelTwo = CreateDefinition("crowbar", 2, null, Vector2Int.zero);
+            BagItemDefinition levelOne = CreateDefinition("crowbar", 1, levelTwo, Vector2Int.zero);
+            BagItemInstance existing = new BagItemInstance(levelTwo);
+            BagItemInstance dragged = new BagItemInstance(levelOne);
+            Assert.That(manager.Grid.TryPlace(existing, Vector2Int.zero, out _), Is.True);
+            manager.Container.AddBottom(dragged);
+            Assert.That(manager.BeginDrag(dragged), Is.True);
+
+            bool dropped = manager.TryDropToBag(Vector2Int.zero, out PlacementFailureReason failure);
+
+            Assert.That(dropped, Is.True);
+            Assert.That(failure, Is.EqualTo(PlacementFailureReason.None));
+            Assert.That(manager.Grid.GetOccupant(Vector2Int.zero), Is.SameAs(dragged));
+            Assert.That(manager.Container.Items, Is.EqualTo(new[] { existing }));
+            Assert.That(existing.Level, Is.EqualTo(2));
+            Assert.That(dragged.Level, Is.EqualTo(1));
+        }
+
+        [Test]
+        public void TryDropToBag_MultipleBlockers_RestoresContainerIndex()
         {
             BagManager manager = CreateManager();
             BagItemInstance first = CreateItem("first", Vector2Int.zero);
-            BagItemInstance dragged = CreateItem("dragged", Vector2Int.zero);
+            BagItemInstance dragged = CreateItem("dragged", Vector2Int.zero, Vector2Int.right);
             BagItemInstance last = CreateItem("last", Vector2Int.zero);
-            BagItemInstance blocker = CreateItem("blocker", Vector2Int.zero);
+            BagItemInstance firstBlocker = CreateItem("first-blocker", Vector2Int.zero);
+            BagItemInstance secondBlocker = CreateItem("second-blocker", Vector2Int.zero);
             manager.Container.AddBottom(first);
             manager.Container.AddBottom(dragged);
             manager.Container.AddBottom(last);
-            Assert.That(manager.Grid.TryPlace(blocker, Vector2Int.zero, out _), Is.True);
+            Assert.That(manager.Grid.TryPlace(firstBlocker, Vector2Int.zero, out _), Is.True);
+            Assert.That(manager.Grid.TryPlace(secondBlocker, Vector2Int.right, out _), Is.True);
             Assert.That(manager.BeginDrag(dragged), Is.True);
 
             bool dropped = manager.TryDropToBag(Vector2Int.zero, out PlacementFailureReason failure);
@@ -93,6 +189,8 @@ namespace BagManagementBattler.Tests
             Assert.That(manager.Container.Items[0], Is.SameAs(first));
             Assert.That(manager.Container.Items[1], Is.SameAs(dragged));
             Assert.That(manager.Container.Items[2], Is.SameAs(last));
+            Assert.That(manager.Grid.GetOccupant(Vector2Int.zero), Is.SameAs(firstBlocker));
+            Assert.That(manager.Grid.GetOccupant(Vector2Int.right), Is.SameAs(secondBlocker));
         }
 
         [Test]
@@ -158,9 +256,20 @@ namespace BagManagementBattler.Tests
 
         private BagItemInstance CreateItem(string itemTypeId, params Vector2Int[] footprint)
         {
-            BagItemDefinition definition = BagItemDefinition.CreateTransient(itemTypeId, footprint);
-            transientDefinitions.Add(definition);
+            BagItemDefinition definition = CreateDefinition(itemTypeId, 1, null, footprint);
             return new BagItemInstance(definition);
+        }
+
+        private BagItemDefinition CreateDefinition(
+            string itemTypeId,
+            int level,
+            BagItemDefinition nextLevel,
+            params Vector2Int[] footprint)
+        {
+            BagItemDefinition definition =
+                BagItemDefinition.CreateTransient(itemTypeId, level, footprint, nextLevel);
+            transientDefinitions.Add(definition);
+            return definition;
         }
 
         private static IEnumerable<Vector2Int> AllCells(int width, int height)

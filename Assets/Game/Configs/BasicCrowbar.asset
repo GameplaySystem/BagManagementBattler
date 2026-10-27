@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: BasicCrowbar
   m_EditorClassIdentifier: BagManagementBattler.Runtime::BagManagementBattler.Bag.BagItemDefinition
   itemTypeId: weapon.crowbar.basic
+  level: 1
+  nextLevelDefinition: {fileID: 11400000, guid: a2c7e8d1f4b64c9aa6e3b5d8071f2c44, type: 2}
   footprint:
   - {x: 0, y: 0}
   iconSprite: {fileID: -6321939147899075484, guid: f9410564c377b664b9a73fe705f54ca3, type: 3}

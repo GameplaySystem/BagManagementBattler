@@ -1,6 +1,6 @@
 # Bag War — Architecture
 
-Status: design baseline; implementation has not been verified or started here.
+Status: design baseline; implemented incrementally through the current roadmap task.
 Working title: Bag War. Component names below describe responsibilities, not a
 requirement to create every class before its feature is implemented.
 
@@ -49,15 +49,15 @@ framework, or speculative extension architecture for these responsibilities.
 
 ## Configuration and runtime data
 
-ScriptableObjects are read-only configuration at runtime. Explicit level
-entries define progression; do not derive level stats using scaling formulas.
-Runtime item/unit instances own their mutable values.
+ScriptableObjects are read-only configuration at runtime. Explicit,
+level-specific definition assets define progression; do not derive level stats
+using scaling formulas. Runtime item/unit instances own their mutable values.
 
 | Configuration | Contents |
 |---|---|
 | Bag config | Maximum dimensions, initially unlocked cells |
-| SoldierConfig | Identity, footprint, per-level max health, base speed, acquisition range and visuals |
-| WeaponConfig | Identity, footprint, per-level damage, attack interval/range, production duration, speed multiplier and visuals; melee/ranged designation |
+| Soldier item definition | Stable type identity, one explicit level, footprint, optional next-level definition, level stats and visuals |
+| Weapon item definition | Stable type identity, one explicit level, footprint, optional next-level definition, level stats and visuals; melee/ranged designation |
 | ShopConfig | Weighted item options, reroll batch size, cost list and reduced resale values |
 | WaveConfig | Spawn entries, victory reward, defeat reward, ShopConfig |
 | WorldConfig | Ordered WaveConfig references |
@@ -66,7 +66,12 @@ Footprints are relative integer cell offsets. A soldier bag item is 1 cell
 wide and 2 cells tall. No rotation. Item identity is independent of instance
 identity; two separately purchased copies can merge.
 
-Runtime state includes item level/location, weapon elapsed production time,
+Each item level is a separate definition asset. Definitions in one item family
+share a stable type identifier, and each non-maximum definition directly
+references its next level. Future buy configs select type and level and resolve
+the corresponding definition; they do not duplicate the item definition.
+
+Runtime state includes the current item definition/location, weapon elapsed production time,
 unit health/target/state, active units, currency, current wave and reroll count.
 Soldier item level supplies soldier stats; weapon level supplies weapon stats.
 Combat speed uses soldier base speed and the weapon speed multiplier.
@@ -80,14 +85,16 @@ Combat speed uses soldier base speed and the weapon speed multiplier.
   retaining enough information to restore its original location.
 - Validate the complete result before committing occupancy changes.
 - Empty valid destination: place the dragged item.
-- One matching identity and level: merge if a next level exists. Validate the
-  resulting footprint before consuming either item.
+- One item using the same level-specific definition: merge if its next-level
+  reference exists. The destination instance survives and advances to that
+  definition; the dragged instance is consumed only after validation.
 - One incompatible obstructing item: move it to the bottom container, then
   place the dragged item. This is replacement, not a position swap.
 - More than one distinct obstructing item: reject.
 - Any invalid drop: restore the item to its original source.
-- A same-level maximum-level match cannot merge. Its exact drop behavior is
-  unresolved; confirm it when implementing placement.
+- A same-level maximum-level match cannot merge, so it follows replacement:
+  the dragged instance takes the cells and the displaced instance moves to the
+  bottom of the container.
 - Container items can be dragged into the bag, and bag items into the container.
 - Expansion pieces unlock 1x1, 1x2 or 2x1 cells. Every cell must be locked and
   in bounds, and the new area must share an edge with an unlocked cell.
@@ -199,7 +206,7 @@ World-space camera framing does not itself require a specific bag renderer.
 ## Decisions still to settle when relevant
 
 - Unity version/render pipeline, target platform and bag rendering approach.
-- Input cancellation on disable/phase change; max-level matching drop behavior.
+- Input cancellation on later phase changes.
 - Production timer reset between battles and catch-up after long frames.
 - Damage point within attack cadence and base-contact damage.
 - Reroll cost-list exhaustion, starting currency and initial item configurations.

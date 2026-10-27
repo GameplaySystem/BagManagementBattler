@@ -44,6 +44,14 @@ namespace BagManagementBattler.Bag
 
         public PlacementFailureReason ValidatePlacement(BagItemInstance item, Vector2Int origin)
         {
+            return ValidatePlacementIgnoring(item, origin, null);
+        }
+
+        internal PlacementFailureReason ValidatePlacementIgnoring(
+            BagItemInstance item,
+            Vector2Int origin,
+            BagItemInstance ignoredOccupant)
+        {
             EnsureCanBeginPlacement(item);
 
             IReadOnlyList<Vector2Int> footprint = item.Definition.Footprint;
@@ -66,7 +74,8 @@ namespace BagManagementBattler.Bag
 
             for (int index = 0; index < footprint.Count; index++)
             {
-                if (GetOccupant(origin + footprint[index]) != null)
+                BagItemInstance occupant = GetOccupant(origin + footprint[index]);
+                if (occupant != null && !ReferenceEquals(occupant, ignoredOccupant))
                 {
                     return PlacementFailureReason.Occupied;
                 }

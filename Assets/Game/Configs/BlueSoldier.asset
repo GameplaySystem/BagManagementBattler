@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: BlueSoldier
   m_EditorClassIdentifier: BagManagementBattler.Runtime::BagManagementBattler.Bag.BagItemDefinition
   itemTypeId: soldier.blue
+  level: 1
+  nextLevelDefinition: {fileID: 0}
   footprint:
   - {x: 0, y: 0}
   - {x: 0, y: 1}

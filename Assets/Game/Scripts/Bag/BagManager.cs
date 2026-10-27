@@ -54,21 +54,38 @@ namespace BagManagementBattler.Bag
         public PlacementFailureReason ValidateDropToBag(Vector2Int origin)
         {
             EnsureDragging();
-            return Grid.ValidatePlacement(activeDrag.Item, origin);
+            return EvaluateDrop(origin).FailureReason;
         }
 
         public bool TryDropToBag(Vector2Int origin, out PlacementFailureReason failureReason)
         {
             EnsureDragging();
 
-            if (Grid.TryPlace(activeDrag.Item, origin, out failureReason))
+            DropPlan plan = EvaluateDrop(origin);
+            failureReason = plan.FailureReason;
+            if (failureReason != PlacementFailureReason.None)
             {
-                activeDrag = null;
-                return true;
+                RestoreSource();
+                return false;
             }
 
-            RestoreSource();
-            return false;
+            switch (plan.Operation)
+            {
+                case DropOperation.Place:
+                    PlaceDraggedItem(origin);
+                    break;
+                case DropOperation.Merge:
+                    plan.ObstructingItem.AdvanceTo(activeDrag.Item.Definition.NextLevelDefinition);
+                    activeDrag = null;
+                    break;
+                case DropOperation.Replace:
+                    ReplaceItem(plan.ObstructingItem, origin);
+                    break;
+                default:
+                    throw new InvalidOperationException("The evaluated bag drop has no valid operation.");
+            }
+
+            return true;
         }
 
         public void DropToContainer()
@@ -113,6 +130,97 @@ namespace BagManagementBattler.Bag
             activeDrag = null;
         }
 
+        private DropPlan EvaluateDrop(Vector2Int origin)
+        {
+            BagItemInstance draggedItem = activeDrag.Item;
+            PlacementFailureReason directFailure = Grid.ValidatePlacement(draggedItem, origin);
+            if (directFailure == PlacementFailureReason.None)
+            {
+                return DropPlan.Valid(DropOperation.Place, null);
+            }
+
+            if (directFailure != PlacementFailureReason.Occupied)
+            {
+                return DropPlan.Invalid(directFailure);
+            }
+
+            BagItemInstance obstruction = null;
+            foreach (Vector2Int offset in draggedItem.Definition.Footprint)
+            {
+                BagItemInstance occupant = Grid.GetOccupant(origin + offset);
+                if (occupant == null)
+                {
+                    continue;
+                }
+
+                if (obstruction == null)
+                {
+                    obstruction = occupant;
+                }
+                else if (!ReferenceEquals(obstruction, occupant))
+                {
+                    return DropPlan.Invalid(PlacementFailureReason.Occupied);
+                }
+            }
+
+            if (obstruction == null)
+            {
+                throw new InvalidOperationException("An occupied placement did not report an obstructing item.");
+            }
+
+            if (CanMerge(draggedItem, obstruction))
+            {
+                return DropPlan.Valid(DropOperation.Merge, obstruction);
+            }
+
+            PlacementFailureReason replacementFailure =
+                Grid.ValidatePlacementIgnoring(draggedItem, origin, obstruction);
+            return replacementFailure == PlacementFailureReason.None
+                ? DropPlan.Valid(DropOperation.Replace, obstruction)
+                : DropPlan.Invalid(replacementFailure);
+        }
+
+        private void PlaceDraggedItem(Vector2Int origin)
+        {
+            if (!Grid.TryPlace(activeDrag.Item, origin, out PlacementFailureReason failureReason))
+            {
+                throw new InvalidOperationException(
+                    $"A validated bag placement unexpectedly failed: {failureReason}.");
+            }
+
+            activeDrag = null;
+        }
+
+        private void ReplaceItem(BagItemInstance obstruction, Vector2Int origin)
+        {
+            Vector2Int obstructionOrigin = obstruction.Placement.Value;
+            if (!Grid.TryRemove(obstruction))
+            {
+                throw new InvalidOperationException("Could not remove the validated replacement obstruction.");
+            }
+
+            if (!Grid.TryPlace(activeDrag.Item, origin, out PlacementFailureReason failureReason))
+            {
+                if (!Grid.TryPlace(obstruction, obstructionOrigin, out _))
+                {
+                    throw new InvalidOperationException("Could not restore an obstruction after replacement failed.");
+                }
+
+                RestoreSource();
+                throw new InvalidOperationException(
+                    $"A validated replacement unexpectedly failed: {failureReason}.");
+            }
+
+            Container.AddBottom(obstruction);
+            activeDrag = null;
+        }
+
+        private static bool CanMerge(BagItemInstance draggedItem, BagItemInstance obstruction)
+        {
+            return ReferenceEquals(draggedItem.Definition, obstruction.Definition) &&
+                   draggedItem.Definition.NextLevelDefinition != null;
+        }
+
         private void EnsureDragging()
         {
             if (!IsDragging)
@@ -125,6 +233,41 @@ namespace BagManagementBattler.Bag
         {
             Bag,
             Container
+        }
+
+        private enum DropOperation
+        {
+            None,
+            Place,
+            Merge,
+            Replace
+        }
+
+        private readonly struct DropPlan
+        {
+            private DropPlan(
+                DropOperation operation,
+                BagItemInstance obstructingItem,
+                PlacementFailureReason failureReason)
+            {
+                Operation = operation;
+                ObstructingItem = obstructingItem;
+                FailureReason = failureReason;
+            }
+
+            public DropOperation Operation { get; }
+            public BagItemInstance ObstructingItem { get; }
+            public PlacementFailureReason FailureReason { get; }
+
+            public static DropPlan Valid(DropOperation operation, BagItemInstance obstruction)
+            {
+                return new DropPlan(operation, obstruction, PlacementFailureReason.None);
+            }
+
+            public static DropPlan Invalid(PlacementFailureReason failureReason)
+            {
+                return new DropPlan(DropOperation.None, null, failureReason);
+            }
         }
 
         private sealed class DragSnapshot
