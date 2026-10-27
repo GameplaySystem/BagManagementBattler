@@ -1,0 +1,10 @@
+{
+  "name": "BagManagementBattler.PlayModeTests",
+  "rootNamespace": "BagManagementBattler.Tests",
+  "references": [
+    "BagManagementBattler.Runtime"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
+}

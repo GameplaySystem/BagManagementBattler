@@ -438,6 +438,60 @@ MonoBehaviour:
     m_VarianceClampScale: 0.9
     m_ContrastAdaptiveSharpening: 0
   m_Version: 2
+--- !u!1 &2000000000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2000000001}
+  - component: {fileID: 2000000002}
+  m_Layer: 0
+  m_Name: Bag Interaction
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2000000001
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2000000000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2000000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2000000000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1a9b9f2859444e2af1c81007afc4ab4, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BagManagementBattler.Runtime::BagManagementBattler.Bag.BagInteractionBootstrap
+  gridDefinition: {fileID: 11400000, guid: 4686e60885bf4fe09b643c9cc797727c, type: 2}
+  blueSoldier: {fileID: 11400000, guid: 17ade60b0e09489b855da7ad54c74841, type: 2}
+  rifle: {fileID: 11400000, guid: 081abce14ab34faca2a85685f432479e, type: 2}
+  crowbar: {fileID: 11400000, guid: c28ccda3664c4497a52e32b0800d97ab, type: 2}
+  gridCellSprite: {fileID: 21300000, guid: 9a2d79b3420534f48a7ee35d8ba4e352, type: 3}
+  itemBackground1x1: {fileID: 21300000, guid: 0b93d12cb8eeaca41879fbe253115845, type: 3}
+  itemBackground1x2: {fileID: 21300000, guid: e549687aefd86f1448645ddb5de5caa4, type: 3}
+  itemBackground2x1: {fileID: 21300000, guid: 88448fd6bc1de324fba52c75e354d2dc, type: 3}
+  bagWorldOrigin: {x: -1.625, y: -3.55}
+  cellSize: 0.65
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -445,3 +499,4 @@ SceneRoots:
   - {fileID: 1558724110}
   - {fileID: 521983373}
   - {fileID: 573660840}
+  - {fileID: 2000000001}

@@ -4,14 +4,32 @@ using UnityEngine;
 
 namespace BagManagementBattler.Bag
 {
+    [Serializable]
+    public sealed class BagItemVisualPart
+    {
+        [SerializeField] private Sprite sprite;
+        [SerializeField] private Vector2 localPositionInCells;
+        [SerializeField] private float scaleInCells = 1f;
+
+        public Sprite Sprite => sprite;
+        public Vector2 LocalPositionInCells => localPositionInCells;
+        public float ScaleInCells => scaleInCells;
+    }
+
     [CreateAssetMenu(fileName = "BagItemDefinition", menuName = "Bag Game/Bag Item Definition")]
     public sealed class BagItemDefinition : ScriptableObject
     {
         [SerializeField] private string itemTypeId = "item";
         [SerializeField] private List<Vector2Int> footprint = new List<Vector2Int> { Vector2Int.zero };
+        [SerializeField] private Sprite iconSprite;
+        [SerializeField] private Color itemColor = Color.white;
+        [SerializeField] private List<BagItemVisualPart> visualParts = new List<BagItemVisualPart>();
 
         public string ItemTypeId => itemTypeId;
         public IReadOnlyList<Vector2Int> Footprint => footprint;
+        public Sprite IconSprite => iconSprite;
+        public Color ItemColor => itemColor;
+        public IReadOnlyList<BagItemVisualPart> VisualParts => visualParts;
 
         public void Validate()
         {

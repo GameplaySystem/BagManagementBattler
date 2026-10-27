@@ -1,4 +1,8 @@
 {
   "name": "BagManagementBattler.Runtime",
-  "rootNamespace": "BagManagementBattler"
+  "rootNamespace": "BagManagementBattler",
+  "references": [
+    "Unity.InputSystem",
+    "Unity.ugui"
+  ]
 }

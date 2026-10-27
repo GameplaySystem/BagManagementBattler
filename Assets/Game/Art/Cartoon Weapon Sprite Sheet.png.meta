@@ -364,7 +364,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Cartoon Weapon Sprite Sheet_11
+      name: Crowbar_2
       rect:
         serializedVersion: 2
         x: 245
@@ -408,7 +408,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Cartoon Weapon Sprite Sheet_13
+      name: Knife_3
       rect:
         serializedVersion: 2
         x: 54
@@ -430,7 +430,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Cartoon Weapon Sprite Sheet_14
+      name: Crowbar_3
       rect:
         serializedVersion: 2
         x: 229
@@ -663,17 +663,17 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      Cartoon Weapon Sprite Sheet_11: 9150454052939042591
-      Cartoon Weapon Sprite Sheet_13: 5115616344257330307
-      Cartoon Weapon Sprite Sheet_14: 1830161703986129890
       Cartoon Weapon Sprite Sheet_20: 3598506423123023073
       Cartoon Weapon Sprite Sheet_25: -3259029391718858087
       Cartoon Weapon Sprite Sheet_3: 1893022618939310316
       Cartoon Weapon Sprite Sheet_4: 554881081920658627
       Cartoon Weapon Sprite Sheet_9: 7204071445206342152
       Crowbar_1: -6321939147899075484
+      Crowbar_2: 9150454052939042591
+      Crowbar_3: 1830161703986129890
       Knife_0: 2974644454154074762
       Knife_2: 5105214746594443341
+      Knife_3: 5115616344257330307
       Pistol_1: 803001768005808233
       Pistol_2: 3462587844304836759
       Pistol_3: -317019116311700891
