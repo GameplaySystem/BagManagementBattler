@@ -301,6 +301,68 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1074557421
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1074557424}
+  - component: {fileID: 1074557423}
+  - component: {fileID: 1074557425}
+  m_Layer: 0
+  m_Name: Friendly Soldier Spawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1074557423
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1074557421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62487cc9fcef445cbd00f7930d61d999, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BagManagementBattler.Runtime::BagManagementBattler.Combat.SoldierSpawner
+  soldierPrefab: {fileID: 4979877340442591965, guid: f3fcab22a89afd24999200548d6cdb55, type: 3}
+  spawnAnchor: {fileID: 521983373}
+  prewarmCount: 4
+--- !u!4 &1074557424
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1074557421}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1074557425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1074557421}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9321f517463d4d248e6aa760ef20f476, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BagManagementBattler.Runtime::BagManagementBattler.Combat.BagProductionController
+  soldierSpawner: {fileID: 1074557423}
+  autoBeginForDebug: 1
 --- !u!1 &1558724107
 GameObject:
   m_ObjectHideFlags: 0
@@ -404,7 +466,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
-  m_Name: 
+  m_Name:
   m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalCameraData
   m_RenderShadows: 1
   m_RequiresDepthTextureOption: 2
@@ -492,6 +554,7 @@ MonoBehaviour:
   itemBackground2x1: {fileID: 21300000, guid: 88448fd6bc1de324fba52c75e354d2dc, type: 3}
   bagWorldOrigin: {x: -1.625, y: -3.55}
   cellSize: 0.65
+  productionController: {fileID: 1074557425}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -500,3 +563,4 @@ SceneRoots:
   - {fileID: 521983373}
   - {fileID: 573660840}
   - {fileID: 2000000001}
+  - {fileID: 1074557424}

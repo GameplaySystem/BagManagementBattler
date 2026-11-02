@@ -57,7 +57,7 @@ using scaling formulas. Runtime item/unit instances own their mutable values.
 |---|---|
 | Bag config | Maximum dimensions, initially unlocked cells |
 | Soldier item definition | Stable type identity, one explicit level, footprint, optional next-level definition, level stats and visuals |
-| Weapon item definition | Stable type identity, one explicit level, footprint, optional next-level definition, level stats and visuals; melee/ranged designation |
+| Weapon item definition | Stable type identity, one explicit level, footprint, optional next-level definition, level stats and visuals, including the equipped pose relative to a soldier hand anchor; melee/ranged designation |
 | ShopConfig | Weighted item options, reroll batch size, cost list and reduced resale values |
 | WaveConfig | Spawn entries, victory reward, defeat reward, ShopConfig |
 | WorldConfig | Ordered WaveConfig references |
@@ -111,7 +111,10 @@ Combat speed uses soldier base speed and the weapon speed multiplier.
 7. Restart the weapon timer while battle remains active.
 
 Production progress drives visual filling; the fill effect never owns time.
-Timer reset behavior between battles must be settled before this feature.
+Production state is created fresh at battle start and discarded at battle end;
+partial timer progress never carries between battles. A large timer tick emits
+every completed cycle and retains its fractional remainder. The later phase
+controller decides whether production receives time while paused/backgrounded.
 
 ## Combat
 
@@ -133,6 +136,13 @@ or invalidates pending attacks and delayed callbacks.
 Use Rigidbody2D and body Collider2D initially. Use reusable buffers and throttled
 queries for acquisition where appropriate. Add simple separation only if
 playtesting shows a need. Y-based render sorting does not solve collisions.
+The initial unit body is kinematic, and straight-line friendly movement writes
+positive X velocity in `FixedUpdate`.
+
+Each combat-soldier prefab owns one authored `HandPoint`. Weapon-specific local
+position, Z rotation and scale are authored on each weapon level definition and
+applied relative to that anchor. `CombatSoldier` contains no per-weapon pose
+switch or hardcoded item offsets.
 
 ## Spawn and recycle lifecycle
 
@@ -140,6 +150,11 @@ playtesting shows a need. Y-based render sorting does not solve collisions.
 2. Initialize team, stats, weapon, health, movement, targeting and visual state.
 3. Activate behavior only after initialization; enter Idle, then Walk.
 4. Track the unit as active until it is recycled.
+
+The friendly spawner initially uses the authored tent transform as its spawn
+anchor. It prewarms four pooled units and expands on demand rather than imposing
+a gameplay capacity. A later visual-tuning pass may replace the tent transform
+with a child spawn marker without changing the spawner API.
 
 Normal death: health depleted -> DeathState -> visual death completes ->
 CombatSoldier reports completion -> SoldierSpawner releases the pooled unit.
@@ -207,7 +222,6 @@ World-space camera framing does not itself require a specific bag renderer.
 
 - Unity version/render pipeline, target platform and bag rendering approach.
 - Input cancellation on later phase changes.
-- Production timer reset between battles and catch-up after long frames.
 - Damage point within attack cadence and base-contact damage.
 - Reroll cost-list exhaustion, starting currency and initial item configurations.
 - Base health on victory, final-wave screen, and whether persistence is in scope.

@@ -15,6 +15,9 @@ MonoBehaviour:
   itemTypeId: weapon.crowbar.basic
   level: 1
   nextLevelDefinition: {fileID: 11400000, guid: a2c7e8d1f4b64c9aa6e3b5d8071f2c44, type: 2}
+  role: 1
+  productionDurationSeconds: 1
+  movementSpeed: 0
   footprint:
   - {x: 0, y: 0}
   iconSprite: {fileID: -6321939147899075484, guid: f9410564c377b664b9a73fe705f54ca3, type: 3}
@@ -23,3 +26,6 @@ MonoBehaviour:
   - sprite: {fileID: -6321939147899075484, guid: f9410564c377b664b9a73fe705f54ca3, type: 3}
     localPositionInCells: {x: -0.2, y: -0.12}
     scaleInCells: 0.45
+  equippedLocalPosition: {x: 0.02, y: 0.02}
+  equippedLocalRotationDegrees: 0
+  equippedLocalScale: {x: 0.2, y: 0.2}

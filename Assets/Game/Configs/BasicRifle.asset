@@ -15,6 +15,9 @@ MonoBehaviour:
   itemTypeId: weapon.rifle.basic
   level: 1
   nextLevelDefinition: {fileID: 0}
+  role: 1
+  productionDurationSeconds: 1
+  movementSpeed: 0
   footprint:
   - {x: 0, y: 0}
   - {x: 1, y: 0}
@@ -24,3 +27,6 @@ MonoBehaviour:
   - sprite: {fileID: -6210779866356851980, guid: f9410564c377b664b9a73fe705f54ca3, type: 3}
     localPositionInCells: {x: -0.33, y: 0}
     scaleInCells: 0.8
+  equippedLocalPosition: {x: 0, y: 0}
+  equippedLocalRotationDegrees: 0
+  equippedLocalScale: {x: 0.22, y: 0.22}

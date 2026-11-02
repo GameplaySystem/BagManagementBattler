@@ -31,7 +31,7 @@ namespace BagManagementBattler.Tests
             Assert.That(firstCell.bounds.size.x, Is.EqualTo(0.611f).Within(0.01f));
             Assert.That(firstCell.bounds.size.y, Is.EqualTo(0.611f).Within(0.01f));
             Assert.That(items, Is.Not.Null);
-            Assert.That(items.transform.childCount, Is.EqualTo(2));
+            Assert.That(items.transform.childCount, Is.EqualTo(4));
             Assert.That(slots, Is.Not.Null);
             Assert.That(slots.transform.childCount, Is.EqualTo(2));
 
@@ -85,6 +85,8 @@ namespace BagManagementBattler.Tests
             ItemContainerView containerView = interaction.GetComponentInChildren<ItemContainerView>();
             ContainerSlotView rifleSlotView = rifleSlot.GetComponent<ContainerSlotView>();
             Assert.That(rifleSlotView, Is.Not.Null);
+            Assert.That(rifleSlotView.Item.Definition.Role, Is.EqualTo(BagItemRole.Weapon));
+            Assert.That(rifleSlotView.Item.Definition.ProductionDurationSeconds, Is.GreaterThan(0f));
             Transform bottomLeftCell = cells.transform.Find("Cell 0,0");
             Transform bottomSecondCell = cells.transform.Find("Cell 1,0");
             Assert.That(bottomLeftCell, Is.Not.Null);
@@ -110,11 +112,14 @@ namespace BagManagementBattler.Tests
             BagItemInstance crowbar = bagView.GetItemAt(Vector2Int.zero);
             Assert.That(crowbar, Is.Not.Null);
             Assert.That(crowbar.Level, Is.EqualTo(1));
+            Assert.That(crowbar.Definition.Role, Is.EqualTo(BagItemRole.Weapon));
+            Assert.That(crowbar.Definition.ProductionDurationSeconds, Is.GreaterThan(0f));
             Assert.That(crowbar.Definition.NextLevelDefinition, Is.Not.Null);
             Assert.That(crowbar.Definition.NextLevelDefinition.Level, Is.EqualTo(2));
             Assert.That(crowbar.Definition.NextLevelDefinition.IconSprite, Is.Not.Null);
 
             BagItemInstance soldier = bagView.GetItemAt(new Vector2Int(2, 1));
+            Assert.That(soldier.Definition.Role, Is.EqualTo(BagItemRole.Soldier));
             containerView.ShowGhost(soldier, Vector2.zero);
 
             RectTransform dragGhost = containerView.transform.Find("Bag Interface Canvas/Drag Ghost") as RectTransform;

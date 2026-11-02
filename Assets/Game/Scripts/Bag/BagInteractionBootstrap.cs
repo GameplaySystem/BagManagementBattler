@@ -1,3 +1,4 @@
+using BagManagementBattler.Combat;
 using UnityEngine;
 
 namespace BagManagementBattler.Bag
@@ -17,6 +18,9 @@ namespace BagManagementBattler.Bag
         [SerializeField] private Sprite itemBackground2x1;
         [SerializeField] private Vector2 bagWorldOrigin = new Vector2(-1.625f, -3.55f);
         [SerializeField] private float cellSize = 0.65f;
+
+        [Header("Production")]
+        [SerializeField] private BagProductionController productionController;
 
         private void Awake()
         {
@@ -42,6 +46,18 @@ namespace BagManagementBattler.Bag
                 throw new UnityException($"Could not place the initial crowbar: {failure}.");
             }
 
+            BagItemInstance productionRifle = new BagItemInstance(rifle);
+            if (!grid.TryPlace(productionRifle, new Vector2Int(0, 1), out failure))
+            {
+                throw new UnityException($"Could not place the initial production rifle: {failure}.");
+            }
+
+            BagItemInstance productionCrowbar = new BagItemInstance(crowbar);
+            if (!grid.TryPlace(productionCrowbar, new Vector2Int(3, 1), out failure))
+            {
+                throw new UnityException($"Could not place the initial production crowbar: {failure}.");
+            }
+
             container.AddBottom(new BagItemInstance(rifle));
             container.AddBottom(new BagItemInstance(crowbar));
 
@@ -56,6 +72,11 @@ namespace BagManagementBattler.Bag
                 itemBackground1x1,
                 itemBackground1x2,
                 itemBackground2x1);
+
+            productionController.Initialize(grid);
+            BagProductionProgressView progressView =
+                bagObject.AddComponent<BagProductionProgressView>();
+            progressView.Initialize(productionController, bagView);
 
             GameObject containerObject = new GameObject("Item Container View");
             containerObject.transform.SetParent(transform, false);
@@ -80,6 +101,7 @@ namespace BagManagementBattler.Bag
                          itemBackground1x1 != null &&
                          itemBackground1x2 != null &&
                          itemBackground2x1 != null &&
+                         productionController != null &&
                          Camera.main != null;
 
             if (!valid)

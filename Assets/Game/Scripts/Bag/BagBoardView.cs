@@ -9,6 +9,8 @@ namespace BagManagementBattler.Bag
         private static readonly Color CellColor = new Color(0.75f, 0.86f, 1f, 0.9f);
         private static readonly Color ValidColor = new Color(0.45f, 1f, 0.55f, 0.95f);
         private static readonly Color InvalidColor = new Color(1f, 0.42f, 0.42f, 0.95f);
+        private static readonly Color ProductionFillColor =
+            new Color(0.35f, 1f, 0.45f, 1f);
 
         private BagManager manager;
         private Vector2 worldOrigin;
@@ -18,6 +20,8 @@ namespace BagManagementBattler.Bag
         private Sprite itemBackground2x1;
         private SpriteRenderer[,] cellRenderers;
         private Transform itemRoot;
+        private readonly Dictionary<Guid, ProductionFill> productionFills =
+            new Dictionary<Guid, ProductionFill>();
 
         public void Initialize(
             BagManager manager,
@@ -104,8 +108,28 @@ namespace BagManagementBattler.Bag
             return manager.Grid.GetOccupant(cell);
         }
 
+        public bool SetProductionProgress(Guid instanceId, float normalizedProgress)
+        {
+            if (!productionFills.TryGetValue(instanceId, out ProductionFill fill))
+            {
+                return false;
+            }
+
+            fill.SetProgress(normalizedProgress);
+            return true;
+        }
+
+        public void ClearProductionProgress(Guid instanceId)
+        {
+            if (productionFills.TryGetValue(instanceId, out ProductionFill fill))
+            {
+                fill.SetProgress(0f);
+            }
+        }
+
         public void RefreshItems()
         {
+            productionFills.Clear();
             for (int index = itemRoot.childCount - 1; index >= 0; index--)
             {
                 GameObject child = itemRoot.GetChild(index).gameObject;
@@ -184,7 +208,6 @@ namespace BagManagementBattler.Bag
                 worldOrigin.x + (origin.x + min.x + width * 0.5f) * cellSize,
                 worldOrigin.y + (origin.y + min.y + height * 0.5f) * cellSize,
                 0f);
-
             GameObject backgroundObject = new GameObject("Background");
             backgroundObject.transform.SetParent(itemObject.transform, false);
             SpriteRenderer background = backgroundObject.AddComponent<SpriteRenderer>();
@@ -196,6 +219,24 @@ namespace BagManagementBattler.Bag
                 backgroundObject.transform,
                 backgroundSprite,
                 new Vector2(width * cellSize * 0.94f, height * cellSize * 0.94f));
+
+            if (item.Definition.Role == BagItemRole.Weapon)
+            {
+                Vector2 fillSize = new Vector2(
+                    width * cellSize * 0.94f,
+                    height * cellSize * 0.94f);
+                GameObject fillObject = new GameObject("Production Fill");
+                fillObject.transform.SetParent(itemObject.transform, false);
+                SpriteRenderer fillRenderer = fillObject.AddComponent<SpriteRenderer>();
+                fillRenderer.sprite = backgroundSprite;
+                fillRenderer.color = ProductionFillColor;
+                fillRenderer.drawMode = SpriteDrawMode.Sliced;
+                fillRenderer.sortingOrder = 21;
+                fillRenderer.enabled = false;
+                productionFills.Add(
+                    item.InstanceId,
+                    new ProductionFill(fillRenderer, fillSize));
+            }
 
             int partIndex = 0;
             foreach (BagItemVisualPart part in item.Definition.VisualParts)
@@ -215,7 +256,31 @@ namespace BagManagementBattler.Bag
 
                 SpriteRenderer partRenderer = partObject.AddComponent<SpriteRenderer>();
                 partRenderer.sprite = part.Sprite;
-                partRenderer.sortingOrder = 21;
+                partRenderer.sortingOrder = 22;
+            }
+        }
+
+        private sealed class ProductionFill
+        {
+            private readonly SpriteRenderer renderer;
+            private readonly Vector2 fullSize;
+
+            public ProductionFill(SpriteRenderer renderer, Vector2 fullSize)
+            {
+                this.renderer = renderer;
+                this.fullSize = fullSize;
+            }
+
+            public void SetProgress(float normalizedProgress)
+            {
+                float progress = Mathf.Clamp01(normalizedProgress);
+                float width = fullSize.x * progress;
+                renderer.size = new Vector2(Mathf.Max(width, 0.001f), fullSize.y);
+                renderer.transform.localPosition = new Vector3(
+                    (width - fullSize.x) * 0.5f,
+                    0f,
+                    -0.01f);
+                renderer.enabled = progress > 0f;
             }
         }
 
