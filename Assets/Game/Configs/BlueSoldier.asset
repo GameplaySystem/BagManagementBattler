@@ -17,16 +17,12 @@ MonoBehaviour:
   nextLevelDefinition: {fileID: 0}
   role: 0
   productionDurationSeconds: 0
-  movementSpeed: 1
+  unitDefinition: {fileID: 11400000, guid: a31b7c410c514ce987bf239dd39fd101, type: 2}
+  movementSpeedMultiplier: 1
+  engagementRange: 0.75
   footprint:
   - {x: 0, y: 0}
   - {x: 0, y: 1}
-  iconSprite: {fileID: 1424989993188794941, guid: 8778058061a657b4a8b8f9ef34acf5ec, type: 3}
+  iconSprite: {fileID: 0}
   itemColor: {r: 0.25, g: 0.55, b: 1, a: 1}
-  visualParts:
-  - sprite: {fileID: 1424989993188794941, guid: 8778058061a657b4a8b8f9ef34acf5ec, type: 3}
-    localPositionInCells: {x: 0, y: -0.38}
-    scaleInCells: 0.34
-  - sprite: {fileID: 1637202196725018289, guid: d8f43117190ce804da6b5e8eedee6782, type: 3}
-    localPositionInCells: {x: 0, y: 0.43}
-    scaleInCells: 0.34
+  visualParts: []

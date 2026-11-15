@@ -30,14 +30,14 @@ namespace BagManagementBattler.Tests
             SoldierSpawner spawner = CreateSpawner(1, out Transform anchor);
             ProductionRequest request = CreateRequest(2f);
 
-            CombatSoldier firstSpawn = spawner.Spawn(request);
+            CombatUnit firstSpawn = spawner.Spawn(request);
 
             Assert.That(spawner.ActiveCount, Is.EqualTo(1));
             Assert.That(spawner.AvailableCount, Is.Zero);
             Assert.That(firstSpawn.gameObject.activeSelf, Is.True);
             Assert.That(firstSpawn.IsInitialized, Is.True);
             Assert.That(firstSpawn.transform.position, Is.EqualTo(anchor.position));
-            Assert.That(firstSpawn.SoldierDefinition, Is.SameAs(request.SoldierDefinition));
+            Assert.That(firstSpawn.UnitDefinition, Is.SameAs(request.UnitDefinition));
             Assert.That(firstSpawn.WeaponDefinition, Is.SameAs(request.WeaponDefinition));
             Assert.That(firstSpawn.Body.bodyType, Is.EqualTo(RigidbodyType2D.Kinematic));
 
@@ -48,12 +48,12 @@ namespace BagManagementBattler.Tests
             Assert.That(spawner.AvailableCount, Is.EqualTo(1));
             Assert.That(firstSpawn.gameObject.activeSelf, Is.False);
             Assert.That(firstSpawn.IsInitialized, Is.False);
-            Assert.That(firstSpawn.SoldierDefinition, Is.Null);
+            Assert.That(firstSpawn.UnitDefinition, Is.Null);
             Assert.That(firstSpawn.WeaponDefinition, Is.Null);
             Assert.That(firstSpawn.Body.linearVelocity, Is.EqualTo(Vector2.zero));
             Assert.That(firstSpawn.transform.position, Is.EqualTo(anchor.position));
 
-            CombatSoldier reused = spawner.Spawn(request);
+            CombatUnit reused = spawner.Spawn(request);
             Assert.That(reused, Is.SameAs(firstSpawn));
             Assert.That(reused.IsInitialized, Is.True);
         }
@@ -64,8 +64,8 @@ namespace BagManagementBattler.Tests
             SoldierSpawner spawner = CreateSpawner(1, out _);
             ProductionRequest request = CreateRequest(1f);
 
-            CombatSoldier first = spawner.Spawn(request);
-            CombatSoldier second = spawner.Spawn(request);
+            CombatUnit first = spawner.Spawn(request);
+            CombatUnit second = spawner.Spawn(request);
 
             Assert.That(first, Is.Not.SameAs(second));
             Assert.That(spawner.ActiveCount, Is.EqualTo(2));
@@ -80,11 +80,11 @@ namespace BagManagementBattler.Tests
         {
             SoldierSpawner spawner = CreateSpawner(1, out _);
             ProductionRequest request = CreateRequest(1f);
-            CombatSoldier owned = spawner.Spawn(request);
+            CombatUnit owned = spawner.Spawn(request);
 
             GameObject foreignObject = new GameObject("Foreign Soldier");
             createdObjects.Add(foreignObject);
-            CombatSoldier foreign = foreignObject.AddComponent<CombatSoldier>();
+            CombatUnit foreign = foreignObject.AddComponent<CombatUnit>();
 
             Assert.That(spawner.Release(foreign), Is.False);
             Assert.That(spawner.Release(owned), Is.True);
@@ -95,7 +95,7 @@ namespace BagManagementBattler.Tests
         {
             GameObject prefabObject = new GameObject("Combat Soldier Prefab");
             createdObjects.Add(prefabObject);
-            CombatSoldier prefab = prefabObject.AddComponent<CombatSoldier>();
+            CombatUnit prefab = prefabObject.AddComponent<CombatUnit>();
 
             GameObject anchorObject = new GameObject("Tent Anchor");
             createdObjects.Add(anchorObject);
@@ -111,20 +111,24 @@ namespace BagManagementBattler.Tests
 
         private ProductionRequest CreateRequest(float movementSpeed)
         {
-            BagItemDefinition soldier = BagItemDefinition.CreateTransient(
+            UnitDefinition unitDefinition = UnitDefinition.CreateTransient(
+                CombatTeam.Friendly,
+                UnitArchetype.Basic,
+                1,
+                movementSpeed);
+            BagItemDefinition soldier = BagItemDefinition.CreateTransientSoldier(
                 "soldier",
                 1,
-                BagItemRole.Soldier,
-                0f,
-                movementSpeed,
+                unitDefinition,
                 new[] { Vector2Int.zero });
-            BagItemDefinition weapon = BagItemDefinition.CreateTransient(
+            BagItemDefinition weapon = BagItemDefinition.CreateTransientWeapon(
                 "weapon",
                 1,
-                BagItemRole.Weapon,
                 1f,
-                0f,
+                1f,
+                0.75f,
                 new[] { Vector2Int.zero });
+            createdObjects.Add(unitDefinition);
             createdObjects.Add(soldier);
             createdObjects.Add(weapon);
             return new ProductionRequest(soldier, weapon);

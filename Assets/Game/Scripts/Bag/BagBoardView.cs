@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BagManagementBattler.Combat;
 using UnityEngine;
 
 namespace BagManagementBattler.Bag
@@ -239,25 +240,61 @@ namespace BagManagementBattler.Bag
             }
 
             int partIndex = 0;
-            foreach (BagItemVisualPart part in item.Definition.VisualParts)
+            if (item.Definition.Role == BagItemRole.Soldier &&
+                item.Definition.UnitDefinition != null)
             {
-                if (part.Sprite == null)
-                {
-                    continue;
-                }
-
-                GameObject partObject = new GameObject($"Visual {partIndex++}");
-                partObject.transform.SetParent(itemObject.transform, false);
-                partObject.transform.localPosition = new Vector3(
-                    part.LocalPositionInCells.x * cellSize,
-                    part.LocalPositionInCells.y * cellSize,
-                    -0.01f);
-                partObject.transform.localScale = Vector3.one * part.ScaleInCells * cellSize;
-
-                SpriteRenderer partRenderer = partObject.AddComponent<SpriteRenderer>();
-                partRenderer.sprite = part.Sprite;
-                partRenderer.sortingOrder = 22;
+                UnitDefinition unit = item.Definition.UnitDefinition;
+                partIndex = CreateItemVisualPart(
+                    itemObject.transform,
+                    unit.BodySprite,
+                    UnitVisualLayout.BodyPositionInCells,
+                    UnitVisualLayout.ScaleInCells,
+                    partIndex);
+                partIndex = CreateItemVisualPart(
+                    itemObject.transform,
+                    unit.HeadSprite,
+                    UnitVisualLayout.HeadPositionInCells,
+                    UnitVisualLayout.ScaleInCells,
+                    partIndex);
             }
+            else
+            {
+                foreach (BagItemVisualPart part in item.Definition.VisualParts)
+                {
+                    partIndex = CreateItemVisualPart(
+                        itemObject.transform,
+                        part.Sprite,
+                        part.LocalPositionInCells,
+                        part.ScaleInCells,
+                        partIndex);
+                }
+            }
+        }
+
+        private int CreateItemVisualPart(
+            Transform parent,
+            Sprite sprite,
+            Vector2 positionInCells,
+            float scaleInCells,
+            int partIndex)
+        {
+            if (sprite == null)
+            {
+                return partIndex;
+            }
+
+            GameObject partObject = new GameObject($"Visual {partIndex++}");
+            partObject.transform.SetParent(parent, false);
+            partObject.transform.localPosition = new Vector3(
+                positionInCells.x * cellSize,
+                positionInCells.y * cellSize,
+                -0.01f);
+            partObject.transform.localScale = Vector3.one * scaleInCells * cellSize;
+
+            SpriteRenderer partRenderer = partObject.AddComponent<SpriteRenderer>();
+            partRenderer.sprite = sprite;
+            partRenderer.sortingOrder = 22;
+            return partIndex;
         }
 
         private sealed class ProductionFill

@@ -10,6 +10,7 @@
 Thumbs.db
 Desktop.ini
 /TestResults/
+/TestResults-*.xml
 #
 .utmp/
 /[Ll]ibrary/

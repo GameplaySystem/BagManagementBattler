@@ -101,7 +101,7 @@ namespace BagManagementBattler.Tests
         {
             GameObject prefabObject = new GameObject("Combat Soldier Prefab");
             createdObjects.Add(prefabObject);
-            CombatSoldier prefab = prefabObject.AddComponent<CombatSoldier>();
+            CombatUnit prefab = prefabObject.AddComponent<CombatUnit>();
             GameObject anchorObject = new GameObject("Tent Anchor");
             createdObjects.Add(anchorObject);
             GameObject spawnerObject = new GameObject("Spawner");
@@ -130,12 +130,31 @@ namespace BagManagementBattler.Tests
             BagItemRole role,
             float productionDuration)
         {
-            BagItemDefinition definition = BagItemDefinition.CreateTransient(
-                id,
-                1,
-                role,
-                productionDuration,
-                new[] { Vector2Int.zero });
+            BagItemDefinition definition;
+            if (role == BagItemRole.Soldier)
+            {
+                UnitDefinition unit = UnitDefinition.CreateTransient(
+                    CombatTeam.Friendly,
+                    UnitArchetype.Basic,
+                    1,
+                    1f);
+                createdObjects.Add(unit);
+                definition = BagItemDefinition.CreateTransientSoldier(
+                    id,
+                    1,
+                    unit,
+                    new[] { Vector2Int.zero });
+            }
+            else
+            {
+                definition = BagItemDefinition.CreateTransientWeapon(
+                    id,
+                    1,
+                    productionDuration,
+                    1f,
+                    0.75f,
+                    new[] { Vector2Int.zero });
+            }
             createdObjects.Add(definition);
             return definition;
         }

@@ -7,25 +7,25 @@ namespace BagManagementBattler.Combat
 {
     public sealed class SoldierSpawner : MonoBehaviour
     {
-        [SerializeField] private CombatSoldier soldierPrefab;
+        [SerializeField] private CombatUnit unitPrefab;
         [SerializeField] private Transform spawnAnchor;
         [SerializeField, Min(0)] private int prewarmCount = 4;
 
-        private readonly Queue<CombatSoldier> availableUnits = new Queue<CombatSoldier>();
-        private readonly HashSet<CombatSoldier> activeUnits = new HashSet<CombatSoldier>();
-        private readonly HashSet<CombatSoldier> ownedUnits = new HashSet<CombatSoldier>();
+        private readonly Queue<CombatUnit> availableUnits = new Queue<CombatUnit>();
+        private readonly HashSet<CombatUnit> activeUnits = new HashSet<CombatUnit>();
+        private readonly HashSet<CombatUnit> ownedUnits = new HashSet<CombatUnit>();
         private bool initialized;
 
         public int ActiveCount => activeUnits.Count;
         public int AvailableCount => availableUnits.Count;
-        public IReadOnlyCollection<CombatSoldier> ActiveUnits => activeUnits;
+        public IReadOnlyCollection<CombatUnit> ActiveUnits => activeUnits;
         public bool IsInitialized => initialized;
 
         private void Awake()
         {
-            if (soldierPrefab != null && spawnAnchor != null)
+            if (unitPrefab != null && spawnAnchor != null)
             {
-                Initialize(soldierPrefab, spawnAnchor, prewarmCount);
+                Initialize(unitPrefab, spawnAnchor, prewarmCount);
             }
         }
 
@@ -36,18 +36,18 @@ namespace BagManagementBattler.Combat
                 return;
             }
 
-            if (soldierPrefab == null || spawnAnchor == null)
+            if (unitPrefab == null || spawnAnchor == null)
             {
                 Debug.LogError("Soldier spawner is missing its prefab or spawn anchor.", this);
                 enabled = false;
                 return;
             }
 
-            Initialize(soldierPrefab, spawnAnchor, prewarmCount);
+            Initialize(unitPrefab, spawnAnchor, prewarmCount);
         }
 
         public void Initialize(
-            CombatSoldier configuredPrefab,
+            CombatUnit configuredPrefab,
             Transform configuredSpawnAnchor,
             int configuredPrewarmCount = 4)
         {
@@ -56,7 +56,7 @@ namespace BagManagementBattler.Combat
                 throw new InvalidOperationException("The soldier spawner is already initialized.");
             }
 
-            soldierPrefab = configuredPrefab != null
+            unitPrefab = configuredPrefab != null
                 ? configuredPrefab
                 : throw new ArgumentNullException(nameof(configuredPrefab));
             spawnAnchor = configuredSpawnAnchor != null
@@ -76,20 +76,20 @@ namespace BagManagementBattler.Combat
             }
         }
 
-        public CombatSoldier Spawn(ProductionRequest request)
+        public CombatUnit Spawn(ProductionRequest request)
         {
             EnsureInitialized();
 
-            CombatSoldier unit = availableUnits.Count > 0
+            CombatUnit unit = availableUnits.Count > 0
                 ? availableUnits.Dequeue()
                 : CreateUnit();
-            unit.Initialize(request, spawnAnchor.position);
+            unit.Initialize(request.ToLoadout(), spawnAnchor.position);
             activeUnits.Add(unit);
             unit.gameObject.SetActive(true);
             return unit;
         }
 
-        public bool Release(CombatSoldier unit)
+        public bool Release(CombatUnit unit)
         {
             EnsureInitialized();
 
@@ -104,10 +104,10 @@ namespace BagManagementBattler.Combat
             return true;
         }
 
-        private CombatSoldier CreateUnit()
+        private CombatUnit CreateUnit()
         {
-            CombatSoldier unit = Instantiate(soldierPrefab, transform);
-            unit.name = $"{soldierPrefab.name} Pooled {ownedUnits.Count}";
+            CombatUnit unit = Instantiate(unitPrefab, transform);
+            unit.name = $"{unitPrefab.name} Pooled {ownedUnits.Count}";
             unit.gameObject.SetActive(false);
             unit.ResetForPool(spawnAnchor.position);
             ownedUnits.Add(unit);

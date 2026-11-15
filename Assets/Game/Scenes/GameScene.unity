@@ -331,7 +331,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62487cc9fcef445cbd00f7930d61d999, type: 3}
   m_Name:
   m_EditorClassIdentifier: BagManagementBattler.Runtime::BagManagementBattler.Combat.SoldierSpawner
-  soldierPrefab: {fileID: 4979877340442591965, guid: f3fcab22a89afd24999200548d6cdb55, type: 3}
+  unitPrefab: {fileID: 4979877340442591965, guid: f3fcab22a89afd24999200548d6cdb55, type: 3}
   spawnAnchor: {fileID: 521983373}
   prewarmCount: 4
 --- !u!4 &1074557424
@@ -555,6 +555,87 @@ MonoBehaviour:
   bagWorldOrigin: {x: -1.625, y: -3.55}
   cellSize: 0.65
   productionController: {fileID: 1074557425}
+--- !u!1 &2100000000
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2100000001}
+  - component: {fileID: 2100000002}
+  m_Layer: 0
+  m_Name: Test Enemy Spawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2100000001
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2100000000}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2100000004}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2100000002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2100000000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 395a1da83f554635a1bc16cce24fc155, type: 3}
+  m_Name:
+  m_EditorClassIdentifier: BagManagementBattler.Runtime::BagManagementBattler.Combat.TestEnemySpawner
+  unitPrefab: {fileID: 4979877340442591965, guid: f3fcab22a89afd24999200548d6cdb55, type: 3}
+  spawnAnchor: {fileID: 2100000004}
+  enemyDefinition: {fileID: 11400000, guid: b42c8d520d624df098cf34aee4afe201, type: 2}
+  weaponDefinition: {fileID: 11400000, guid: 081abce14ab34faca2a85685f432479e, type: 2}
+  spawnOnStart: 1
+--- !u!1 &2100000003
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2100000004}
+  m_Layer: 0
+  m_Name: Enemy Spawn Point
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2100000004
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2100000003}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.8, y: 0.31, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2100000001}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
@@ -564,3 +645,4 @@ SceneRoots:
   - {fileID: 573660840}
   - {fileID: 2000000001}
   - {fileID: 1074557424}
+  - {fileID: 2100000001}

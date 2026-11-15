@@ -17,7 +17,9 @@ MonoBehaviour:
   nextLevelDefinition: {fileID: 11400000, guid: a2c7e8d1f4b64c9aa6e3b5d8071f2c44, type: 2}
   role: 1
   productionDurationSeconds: 1
-  movementSpeed: 0
+  unitDefinition: {fileID: 0}
+  movementSpeedMultiplier: 1
+  engagementRange: 0.6
   footprint:
   - {x: 0, y: 0}
   iconSprite: {fileID: -6321939147899075484, guid: f9410564c377b664b9a73fe705f54ca3, type: 3}

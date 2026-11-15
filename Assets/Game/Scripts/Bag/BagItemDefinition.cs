@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BagManagementBattler.Combat;
 using UnityEngine;
 
 namespace BagManagementBattler.Bag
@@ -32,7 +33,11 @@ namespace BagManagementBattler.Bag
         [SerializeField, Tooltip("Used only when Role is Weapon.")]
         private float productionDurationSeconds;
         [SerializeField, Tooltip("Used only when Role is Soldier.")]
-        private float movementSpeed = 1f;
+        private UnitDefinition unitDefinition;
+        [SerializeField, Tooltip("Used only when Role is Weapon.")]
+        private float movementSpeedMultiplier = 1f;
+        [SerializeField, Tooltip("Used only when Role is Weapon.")]
+        private float engagementRange = 0.75f;
         [SerializeField] private List<Vector2Int> footprint = new List<Vector2Int> { Vector2Int.zero };
         [SerializeField] private Sprite iconSprite;
         [SerializeField] private Color itemColor = Color.white;
@@ -49,7 +54,9 @@ namespace BagManagementBattler.Bag
         public BagItemDefinition NextLevelDefinition => nextLevelDefinition;
         public BagItemRole Role => role;
         public float ProductionDurationSeconds => productionDurationSeconds;
-        public float MovementSpeed => movementSpeed;
+        public UnitDefinition UnitDefinition => unitDefinition;
+        public float MovementSpeedMultiplier => movementSpeedMultiplier;
+        public float EngagementRange => engagementRange;
         public IReadOnlyList<Vector2Int> Footprint => footprint;
         public Sprite IconSprite => iconSprite;
         public Color ItemColor => itemColor;
@@ -84,6 +91,14 @@ namespace BagManagementBattler.Bag
             }
 
             if (role == BagItemRole.Weapon &&
+                (!IsFinite(movementSpeedMultiplier) || movementSpeedMultiplier <= 0f ||
+                 !IsFinite(engagementRange) || engagementRange <= 0f))
+            {
+                throw new InvalidOperationException(
+                    "A weapon requires finite positive movement multiplier and engagement range values.");
+            }
+
+            if (role == BagItemRole.Weapon &&
                 (!IsFinite(equippedLocalPosition.x) ||
                  !IsFinite(equippedLocalPosition.y) ||
                  !IsFinite(equippedLocalRotationDegrees) ||
@@ -94,14 +109,6 @@ namespace BagManagementBattler.Bag
             {
                 throw new InvalidOperationException(
                     "A weapon equipped pose requires finite position/rotation and positive scale.");
-            }
-
-            if (role == BagItemRole.Soldier &&
-                (float.IsNaN(movementSpeed) ||
-                 float.IsInfinity(movementSpeed) ||
-                 movementSpeed <= 0f))
-            {
-                throw new InvalidOperationException("A soldier movement speed must be finite and greater than zero.");
             }
 
             if (footprint == null || footprint.Count == 0)
@@ -132,12 +139,14 @@ namespace BagManagementBattler.Bag
             IEnumerable<Vector2Int> footprint,
             BagItemDefinition nextLevelDefinition = null)
         {
-            return CreateTransient(
+            return CreateTransientConfigured(
                 itemTypeId,
                 level,
                 BagItemRole.Soldier,
                 0f,
+                null,
                 1f,
+                0.75f,
                 footprint,
                 nextLevelDefinition);
         }
@@ -150,24 +159,68 @@ namespace BagManagementBattler.Bag
             IEnumerable<Vector2Int> footprint,
             BagItemDefinition nextLevelDefinition = null)
         {
-            return CreateTransient(
+            return CreateTransientConfigured(
                 itemTypeId,
                 level,
                 role,
                 productionDurationSeconds,
-                role == BagItemRole.Soldier ? 1f : 0f,
+                null,
+                1f,
+                0.75f,
                 footprint,
                 nextLevelDefinition);
         }
 
-        public static BagItemDefinition CreateTransient(
+        public static BagItemDefinition CreateTransientSoldier(
+            string itemTypeId,
+            int level,
+            UnitDefinition configuredUnitDefinition,
+            IEnumerable<Vector2Int> footprint,
+            BagItemDefinition nextLevelDefinition = null)
+        {
+            return CreateTransientConfigured(
+                itemTypeId,
+                level,
+                BagItemRole.Soldier,
+                0f,
+                configuredUnitDefinition,
+                1f,
+                0.75f,
+                footprint,
+                nextLevelDefinition);
+        }
+
+        public static BagItemDefinition CreateTransientWeapon(
+            string itemTypeId,
+            int level,
+            float productionDurationSeconds,
+            float movementSpeedMultiplier,
+            float engagementRange,
+            IEnumerable<Vector2Int> footprint,
+            BagItemDefinition nextLevelDefinition = null)
+        {
+            return CreateTransientConfigured(
+                itemTypeId,
+                level,
+                BagItemRole.Weapon,
+                productionDurationSeconds,
+                null,
+                movementSpeedMultiplier,
+                engagementRange,
+                footprint,
+                nextLevelDefinition);
+        }
+
+        private static BagItemDefinition CreateTransientConfigured(
             string itemTypeId,
             int level,
             BagItemRole role,
             float productionDurationSeconds,
-            float movementSpeed,
+            UnitDefinition unitDefinition,
+            float movementSpeedMultiplier,
+            float engagementRange,
             IEnumerable<Vector2Int> footprint,
-            BagItemDefinition nextLevelDefinition = null)
+            BagItemDefinition nextLevelDefinition)
         {
             if (footprint == null)
             {
@@ -181,7 +234,9 @@ namespace BagManagementBattler.Bag
                 level,
                 role,
                 productionDurationSeconds,
-                movementSpeed,
+                unitDefinition,
+                movementSpeedMultiplier,
+                engagementRange,
                 footprint,
                 nextLevelDefinition);
             return definition;
@@ -192,7 +247,9 @@ namespace BagManagementBattler.Bag
             int configuredLevel,
             BagItemRole configuredRole,
             float configuredProductionDurationSeconds,
-            float configuredMovementSpeed,
+            UnitDefinition configuredUnitDefinition,
+            float configuredMovementSpeedMultiplier,
+            float configuredEngagementRange,
             IEnumerable<Vector2Int> configuredFootprint,
             BagItemDefinition configuredNextLevelDefinition)
         {
@@ -205,7 +262,9 @@ namespace BagManagementBattler.Bag
             level = configuredLevel;
             role = configuredRole;
             productionDurationSeconds = configuredProductionDurationSeconds;
-            movementSpeed = configuredMovementSpeed;
+            unitDefinition = configuredUnitDefinition;
+            movementSpeedMultiplier = configuredMovementSpeedMultiplier;
+            engagementRange = configuredEngagementRange;
             nextLevelDefinition = configuredNextLevelDefinition;
             footprint = new List<Vector2Int>();
 

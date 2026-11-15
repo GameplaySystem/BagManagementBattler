@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e136e164a6b943c48a44b11728c54945, type: 3}
+  m_Name: FriendlyBasicLevel2
+  m_EditorClassIdentifier: BagManagementBattler.Runtime::BagManagementBattler.Combat.UnitDefinition
+  team: 0
+  archetype: 0
+  level: 2
+  headSprite: {fileID: -5986225815814414787, guid: 1d3f98efb132904489e12a56e7a1abf3, type: 3}
+  bodySprite: {fileID: 1424989993188794941, guid: 8778058061a657b4a8b8f9ef34acf5ec, type: 3}
+  baseMovementSpeed: 1

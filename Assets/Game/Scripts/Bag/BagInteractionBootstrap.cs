@@ -5,6 +5,8 @@ namespace BagManagementBattler.Bag
 {
     public sealed class BagInteractionBootstrap : MonoBehaviour
     {
+        public BagManager Manager { get; private set; }
+
         [Header("Runtime Definitions")]
         [SerializeField] private BagGridDefinition gridDefinition;
         [SerializeField] private BagItemDefinition blueSoldier;
@@ -33,6 +35,7 @@ namespace BagManagementBattler.Bag
             BagGrid grid = new BagGrid(gridDefinition);
             ItemContainer container = new ItemContainer();
             BagManager manager = new BagManager(grid, container);
+            Manager = manager;
 
             BagItemInstance soldierInstance = new BagItemInstance(blueSoldier);
             if (!grid.TryPlace(soldierInstance, new Vector2Int(2, 1), out PlacementFailureReason failure))

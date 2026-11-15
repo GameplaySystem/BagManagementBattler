@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using BagManagementBattler.Bag;
+using BagManagementBattler.Combat;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -216,12 +217,31 @@ namespace BagManagementBattler.Tests
             float productionDuration,
             params Vector2Int[] footprint)
         {
-            BagItemDefinition definition = BagItemDefinition.CreateTransient(
-                itemTypeId,
-                1,
-                role,
-                productionDuration,
-                footprint);
+            BagItemDefinition definition;
+            if (role == BagItemRole.Soldier)
+            {
+                UnitDefinition unit = UnitDefinition.CreateTransient(
+                    CombatTeam.Friendly,
+                    UnitArchetype.Basic,
+                    1,
+                    1f);
+                transientDefinitions.Add(unit);
+                definition = BagItemDefinition.CreateTransientSoldier(
+                    itemTypeId,
+                    1,
+                    unit,
+                    footprint);
+            }
+            else
+            {
+                definition = BagItemDefinition.CreateTransientWeapon(
+                    itemTypeId,
+                    1,
+                    productionDuration,
+                    1f,
+                    0.75f,
+                    footprint);
+            }
             transientDefinitions.Add(definition);
             return definition;
         }

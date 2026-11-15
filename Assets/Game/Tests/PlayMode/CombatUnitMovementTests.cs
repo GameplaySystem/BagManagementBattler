@@ -7,35 +7,38 @@ using UnityEngine.TestTools;
 
 namespace BagManagementBattler.Tests
 {
-    public sealed class CombatSoldierMovementTests
+    public sealed class CombatUnitMovementTests
     {
         [UnityTest]
         public IEnumerator SpawnedKinematicSoldier_AdvancesTowardPositiveX()
         {
-            BagItemDefinition soldierDefinition = BagItemDefinition.CreateTransient(
+            UnitDefinition unitDefinition = UnitDefinition.CreateTransient(
+                CombatTeam.Friendly,
+                UnitArchetype.Basic,
+                1,
+                2f);
+            BagItemDefinition soldierDefinition = BagItemDefinition.CreateTransientSoldier(
                 "soldier",
                 1,
-                BagItemRole.Soldier,
-                0f,
-                2f,
+                unitDefinition,
                 new[] { Vector2Int.zero });
-            BagItemDefinition weaponDefinition = BagItemDefinition.CreateTransient(
+            BagItemDefinition weaponDefinition = BagItemDefinition.CreateTransientWeapon(
                 "weapon",
                 1,
-                BagItemRole.Weapon,
                 1f,
-                0f,
+                1f,
+                0.75f,
                 new[] { Vector2Int.zero });
 
             GameObject prefabObject = new GameObject("Combat Soldier Prefab");
-            CombatSoldier prefab = prefabObject.AddComponent<CombatSoldier>();
+            CombatUnit prefab = prefabObject.AddComponent<CombatUnit>();
             GameObject anchorObject = new GameObject("Tent Anchor");
             anchorObject.transform.position = new Vector3(-2.5f, 0.3f, 0f);
             GameObject spawnerObject = new GameObject("Soldier Spawner");
             SoldierSpawner spawner = spawnerObject.AddComponent<SoldierSpawner>();
             spawner.Initialize(prefab, anchorObject.transform, 1);
 
-            CombatSoldier unit = spawner.Spawn(
+            CombatUnit unit = spawner.Spawn(
                 new ProductionRequest(soldierDefinition, weaponDefinition));
             float startingX = unit.transform.position.x;
 
@@ -52,6 +55,7 @@ namespace BagManagementBattler.Tests
             Object.Destroy(prefabObject);
             Object.Destroy(soldierDefinition);
             Object.Destroy(weaponDefinition);
+            Object.Destroy(unitDefinition);
             yield return null;
         }
     }

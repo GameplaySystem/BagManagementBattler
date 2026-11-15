@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BagManagementBattler.Combat;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
@@ -220,20 +221,66 @@ namespace BagManagementBattler.Bag
             background.color = item.Definition.ItemColor;
 
             int partIndex = 0;
-            foreach (BagItemVisualPart part in item.Definition.VisualParts)
+            if (item.Definition.Role == BagItemRole.Soldier &&
+                item.Definition.UnitDefinition != null)
             {
-                if (part.Sprite == null)
+                UnitDefinition unit = item.Definition.UnitDefinition;
+                partIndex = CreateVisualPartIfPresent(
+                    root,
+                    unit.BodySprite,
+                    UnitVisualLayout.BodyPositionInCells,
+                    UnitVisualLayout.ScaleInCells,
+                    cellPixels,
+                    partIndex);
+                partIndex = CreateVisualPartIfPresent(
+                    root,
+                    unit.HeadSprite,
+                    UnitVisualLayout.HeadPositionInCells,
+                    UnitVisualLayout.ScaleInCells,
+                    cellPixels,
+                    partIndex);
+            }
+            else
+            {
+                foreach (BagItemVisualPart part in item.Definition.VisualParts)
                 {
-                    continue;
+                    partIndex = CreateVisualPartIfPresent(
+                        root,
+                        part.Sprite,
+                        part.LocalPositionInCells,
+                        part.ScaleInCells,
+                        cellPixels,
+                        partIndex);
                 }
-
-                CreateVisualPart(root, part.Sprite, part.LocalPositionInCells, part.ScaleInCells, cellPixels, partIndex++);
             }
 
             if (partIndex == 0 && item.Definition.IconSprite != null)
             {
                 CreateFallbackIcon(root, item.Definition.IconSprite);
             }
+        }
+
+        private static int CreateVisualPartIfPresent(
+            RectTransform root,
+            Sprite sprite,
+            Vector2 positionInCells,
+            float scaleInCells,
+            float cellPixels,
+            int partIndex)
+        {
+            if (sprite == null)
+            {
+                return partIndex;
+            }
+
+            CreateVisualPart(
+                root,
+                sprite,
+                positionInCells,
+                scaleInCells,
+                cellPixels,
+                partIndex);
+            return partIndex + 1;
         }
 
         private static void CreateVisualPart(

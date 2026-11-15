@@ -27,8 +27,8 @@ shotgun, sniper. Integrate a small subset first. Each item has three levels.
 | Item container | Hold ordered loose items in scrollable generated slots | No production; no practical capacity limit |
 | SoldierItem | Bag identity, config reference, current level and placement | Not a battlefield soldier |
 | WeaponItem | Bag state, resolved adjacent soldier items and production timer | Requests spawning; does not acquire pooled instances |
-| SoldierSpawner | Acquire, initialize, track and recycle battlefield units | No bag rules or production scheduling |
-| CombatSoldier | Coordinate a unit's health, movement, targeting and states | No economy or wave progression |
+| SoldierSpawner | Acquire, initialize, track and recycle friendly battlefield units | No bag rules or production scheduling |
+| CombatUnit | Coordinate either team's health, movement, targeting and states | No economy or wave progression |
 | Health | Current/max health and depletion notification | No animation or pool access |
 | Targeting | Acquire nearest valid opponent and retain a valid target | No damage application |
 | Movement | Advance/chase and stop through Rigidbody2D | No attack timing |
@@ -43,7 +43,7 @@ shotgun, sniper. Integrate a small subset first. Each item has three levels.
 | Presentation | Camera, HUD, feedback and visual effects | Observes gameplay; does not decide damage or rewards |
 
 Use plain C# objects for unit subsystems where a MonoBehaviour is unnecessary.
-CombatSoldier is a prefab MonoBehaviour. Use a generic small state machine.
+CombatUnit is a prefab MonoBehaviour. Use a generic small state machine.
 Do not introduce a general service locator, global event bus, transaction
 framework, or speculative extension architecture for these responsibilities.
 
@@ -56,8 +56,9 @@ using scaling formulas. Runtime item/unit instances own their mutable values.
 | Configuration | Contents |
 |---|---|
 | Bag config | Maximum dimensions, initially unlocked cells |
-| Soldier item definition | Stable type identity, one explicit level, footprint, optional next-level definition, level stats and visuals |
-| Weapon item definition | Stable type identity, one explicit level, footprint, optional next-level definition, level stats and visuals, including the equipped pose relative to a soldier hand anchor; melee/ranged designation |
+| UnitCatalog | Unique level-specific entries for both teams: team, unit archetype, level, head/body visuals, base movement speed, and later body-owned stats |
+| Soldier item definition | Stable bag-item identity, one explicit level, footprint, optional next-level definition, and a direct reference to its matching friendly UnitCatalog entry |
+| Weapon item definition | Stable type identity, one explicit level, footprint, optional next-level definition, weapon stats including movement-speed multiplier, and equipped pose relative to a unit hand anchor; melee/ranged designation |
 | ShopConfig | Weighted item options, reroll batch size, cost list and reduced resale values |
 | WaveConfig | Spawn entries, victory reward, defeat reward, ShopConfig |
 | WorldConfig | Ordered WaveConfig references |
@@ -71,10 +72,16 @@ share a stable type identifier, and each non-maximum definition directly
 references its next level. Future buy configs select type and level and resolve
 the corresponding definition; they do not duplicate the item definition.
 
+`UnitCatalog` entries are unique by `(Team, UnitArchetype, Level)`. A friendly
+bag-soldier definition directly references its matching catalog entry, while a
+future enemy wave entry directly references one enemy catalog entry and one
+level-specific weapon definition. Neither entry duplicates team/level fields
+already supplied by those references.
+
 Runtime state includes the current item definition/location, weapon elapsed production time,
 unit health/target/state, active units, currency, current wave and reroll count.
-Soldier item level supplies soldier stats; weapon level supplies weapon stats.
-Combat speed uses soldier base speed and the weapon speed multiplier.
+Unit catalog entries supply body-owned stats; weapon levels supply weapon stats.
+Combat speed is unit base speed multiplied by the weapon speed multiplier.
 
 ## Bag rules
 
@@ -106,8 +113,9 @@ Combat speed uses soldier base speed and the weapon speed multiplier.
 3. Deduplicate neighboring SoldierItem instances: multiple touching edges count
    as one connection. Diagonal contact never counts.
 4. Each weapon owns one timer, regardless of adjacent soldier count.
-5. At completion, request one combat soldier per unique adjacent SoldierItem.
-6. Use that soldier item's level and the producing weapon's level/config.
+5. At completion, request one combat unit per unique adjacent SoldierItem.
+6. Use that soldier item's referenced friendly catalog entry and the producing
+   weapon's level-specific definition.
 7. Restart the weapon timer while battle remains active.
 
 Production progress drives visual filling; the fill effect never owns time.
@@ -139,9 +147,9 @@ playtesting shows a need. Y-based render sorting does not solve collisions.
 The initial unit body is kinematic, and straight-line friendly movement writes
 positive X velocity in `FixedUpdate`.
 
-Each combat-soldier prefab owns one authored `HandPoint`. Weapon-specific local
+Each combat-unit prefab owns one authored `HandPoint`. Weapon-specific local
 position, Z rotation and scale are authored on each weapon level definition and
-applied relative to that anchor. `CombatSoldier` contains no per-weapon pose
+applied relative to that anchor. `CombatUnit` contains no per-weapon pose
 switch or hardcoded item offsets.
 
 ## Spawn and recycle lifecycle
@@ -157,7 +165,7 @@ a gameplay capacity. A later visual-tuning pass may replace the tent transform
 with a child spawn marker without changing the spawner API.
 
 Normal death: health depleted -> DeathState -> visual death completes ->
-CombatSoldier reports completion -> SoldierSpawner releases the pooled unit.
+CombatUnit reports completion -> SoldierSpawner releases the pooled unit.
 Death presentation never calls the pool directly.
 Wave cleanup: stop producers and scheduled spawns, then ask SoldierSpawner to
 recycle all remaining units directly, without requiring death animations.
@@ -194,8 +202,9 @@ Begin Battle, in order:
 Keep the bag at its authored scale. Camera framing makes it appear smaller
 during battle, where its production progress remains visible.
 
-Wave entries define start time, soldier/weapon configs and levels, count and
-spawn interval. Entries may overlap.
+Wave entries define start time, one enemy UnitCatalog entry, one level-specific
+weapon definition, count and spawn interval. Entries may overlap and only spawn
+enemies; friendly units remain bag-production output.
 Victory requires schedules finished, no active enemies, and a living base.
 Defeat occurs when base health reaches zero. Resolve an outcome only once;
 a dead base cannot produce victory. Count dying tracked enemies consistently
