@@ -90,6 +90,22 @@ namespace BagManagementBattler.Bag
                 throw new InvalidOperationException("A weapon production duration must be finite and greater than zero.");
             }
 
+            if (role == BagItemRole.Soldier)
+            {
+                if (unitDefinition == null)
+                {
+                    throw new InvalidOperationException(
+                        $"Soldier item '{itemTypeId}' must reference a friendly unit definition.");
+                }
+
+                unitDefinition.Validate();
+                if (unitDefinition.Team != CombatTeam.Friendly)
+                {
+                    throw new InvalidOperationException(
+                        $"Soldier item '{itemTypeId}' must reference a friendly unit definition, not {unitDefinition.Team}.");
+                }
+            }
+
             if (role == BagItemRole.Weapon &&
                 (!IsFinite(movementSpeedMultiplier) || movementSpeedMultiplier <= 0f ||
                  !IsFinite(engagementRange) || engagementRange <= 0f))
@@ -144,7 +160,7 @@ namespace BagManagementBattler.Bag
                 level,
                 BagItemRole.Soldier,
                 0f,
-                null,
+                CreateFixtureFriendlyUnit(),
                 1f,
                 0.75f,
                 footprint,
@@ -164,11 +180,22 @@ namespace BagManagementBattler.Bag
                 level,
                 role,
                 productionDurationSeconds,
-                null,
+                role == BagItemRole.Soldier ? CreateFixtureFriendlyUnit() : null,
                 1f,
                 0.75f,
                 footprint,
                 nextLevelDefinition);
+        }
+
+        // Generic transient items default to the Soldier role; give them a valid
+        // friendly unit so grid/merge fixtures satisfy soldier validation.
+        private static UnitDefinition CreateFixtureFriendlyUnit()
+        {
+            return UnitDefinition.CreateTransient(
+                CombatTeam.Friendly,
+                UnitArchetype.Basic,
+                1,
+                1f);
         }
 
         public static BagItemDefinition CreateTransientSoldier(

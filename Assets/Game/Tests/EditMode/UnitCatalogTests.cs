@@ -2,6 +2,7 @@ using System;
 using BagManagementBattler.Bag;
 using BagManagementBattler.Combat;
 using NUnit.Framework;
+using UnityEditor;
 using UnityEngine;
 
 namespace BagManagementBattler.Tests
@@ -21,6 +22,51 @@ namespace BagManagementBattler.Tests
 
             UnityEngine.Object.DestroyImmediate(first);
             UnityEngine.Object.DestroyImmediate(duplicate);
+        }
+
+        [Test]
+        public void SoldierDefinition_RejectsMissingUnitDefinition()
+        {
+            Assert.Throws<InvalidOperationException>(() =>
+                BagItemDefinition.CreateTransientSoldier(
+                    "soldier.test", 1, null, new[] { Vector2Int.zero }));
+        }
+
+        [Test]
+        public void SoldierDefinition_RejectsEnemyUnitDefinition()
+        {
+            UnitDefinition enemy = UnitDefinition.CreateTransient(
+                CombatTeam.Enemy, UnitArchetype.Basic, 1, 1f);
+
+            Assert.Throws<InvalidOperationException>(() =>
+                BagItemDefinition.CreateTransientSoldier(
+                    "soldier.test", 1, enemy, new[] { Vector2Int.zero }));
+
+            UnityEngine.Object.DestroyImmediate(enemy);
+        }
+
+        [Test]
+        public void AuthoredConfigs_PassValidation()
+        {
+            string[] configFolders = { "Assets/Game/Configs" };
+            string[] itemGuids = AssetDatabase.FindAssets("t:BagItemDefinition", configFolders);
+            string[] catalogGuids = AssetDatabase.FindAssets("t:UnitCatalog", configFolders);
+            Assert.That(itemGuids, Is.Not.Empty);
+            Assert.That(catalogGuids, Is.Not.Empty);
+
+            foreach (string guid in itemGuids)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                BagItemDefinition definition = AssetDatabase.LoadAssetAtPath<BagItemDefinition>(path);
+                Assert.DoesNotThrow(definition.Validate, path);
+            }
+
+            foreach (string guid in catalogGuids)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                UnitCatalog catalog = AssetDatabase.LoadAssetAtPath<UnitCatalog>(path);
+                Assert.DoesNotThrow(catalog.Validate, path);
+            }
         }
 
         [Test]
